@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Food Hunter!</string>
+    <string name="title_activity_show_map">Map</string>
+    <string name="b_find_place_for_name">Find place for name</string>
+    <string name="b_find_food_for_name">Find food for name</string>
+    <string name="b_find_place_for_name_nearby">Find place for name nearby</string>
+    <string name="b_find_food_for_name_nearby">Find food for name nearby</string>
+    <string name="search_line">Enter the name of place or dish…</string>
+
+    <string name="bc_find_place_for_name">onFindPlaceForNameClick</string>
+    <string name="bc_find_food_for_name">onFindFoodForNameClick</string>
+    <string name="bc_find_place_for_name_nearby">onFindPlaceForNameNearbyClick</string>
+    <string name="bc_find_food_for_name_nearby">onFindFoodForNameNearbyClick</string>
+    <string name="no_result">No results found.</string>
+    <string name="title_activity_show_on_map">Map</string>
+</resources>

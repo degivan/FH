@@ -1,48 +1,56 @@
 package spbau.mit.divan.foodhunter.dishes;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import spbau.mit.divan.foodhunter.net.Client;
 
 /**
  * Created by Ксения on 08.02.2016.
  */
-public class Place implements Serializable {
-    public final String name;
-    public final String address;
-    public final String openHours;
-    public final List<Integer> menu;
+public class Place implements Serializable, MapObject {
+    private String name;
+    private String openHours;
+    private List<Integer> menu;
     private double rate;
     private int rateIndex;
     private List<String> reviews;
-    public final double latitude;
-    public final double longitude;
-    public final int id;
+    private int id;
+    private String address;
+    private double latitude;
+    private double longitude;
 
-
-    public Place(String name, String address, String openHours, List<Integer> menu,
-                 List<String> reviews, double rate, int rateIndex, double latitude, double longitude, int id) {
-        this.name = name;
-        this.address = address;
-        this.openHours = openHours;
-        this.menu = menu;
-        this.reviews = reviews;
-        this.rate = rate;
-        this.rateIndex = rateIndex;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.id = id;
+    @Override
+    public String getAddress() {
+        return address;
     }
 
-    public void setRate(float mark) {
-        rate = (rateIndex * rate + mark) / (rateIndex + 1);
-        rateIndex++;
+    @Override
+    public double getLatitude() {
+        return latitude;
+    }
+
+    @Override
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getOpenHours() {
+        return openHours;
+    }
+
+    public List<Integer> getMenu() {
+        return menu;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getRateIndex() {
+        return rateIndex;
     }
 
     public double getRate() {
@@ -50,11 +58,31 @@ public class Place implements Serializable {
     }
 
 
-    public List<String> getReviews() { return reviews; }
+    public List<String> getReviews() {
+        return reviews;
+    }
+
+    public Place(String name, String address, String openHours, List<Integer> menu,
+                 List<String> reviews, double rate, int rateIndex, double latitude, double longitude, int id) {
+        this.name = name;
+        this.openHours = openHours;
+        this.menu = menu;
+        this.reviews = reviews;
+        this.rate = rate;
+        this.rateIndex = rateIndex;
+        this.id = id;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    public void setRate(float mark) {
+        rate = (rateIndex * rate + mark) / (rateIndex + 1);
+        rateIndex++;
+    }
 
     public void sendReview(String review) {
         reviews.add(review);
     }
 
-    public int getRateIndex() { return  rateIndex; }
 }

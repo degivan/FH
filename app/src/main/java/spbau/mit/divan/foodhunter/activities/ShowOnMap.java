@@ -1,13 +1,11 @@
 package spbau.mit.divan.foodhunter.activities;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.widget.EditText;
+import android.support.v4.app.FragmentActivity;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -24,7 +22,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import spbau.mit.divan.foodhunter.R;
 import spbau.mit.divan.foodhunter.dishes.Place;
 
-public class ShowOnMap extends FragmentActivity implements OnMapReadyCallback,  GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class ShowOnMap extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
@@ -78,7 +76,7 @@ public class ShowOnMap extends FragmentActivity implements OnMapReadyCallback,  
         }
         Location location = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
-        LatLng ll = new LatLng(location.getLatitude(),location.getLongitude());
+        LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.fromLatLngZoom(ll, (float) 15.5)));
         mMap.addMarker(new MarkerOptions()
                 .anchor(0.0f, 1.0f)
@@ -87,8 +85,8 @@ public class ShowOnMap extends FragmentActivity implements OnMapReadyCallback,  
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         mMap.addMarker(new MarkerOptions()
                 .anchor(0.0f, 1.0f)
-                .position(new LatLng(place.latitude, place.longitude))
-                .title(place.name));
+                .position(new LatLng(place.getLatitude(), place.getLongitude()))
+                .title(place.getName()));
     }
 
     @Override

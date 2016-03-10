@@ -3,21 +3,20 @@ package spbau.mit.divan.foodhunter.activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Build;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
+import com.annimon.stream.Collectors;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -27,11 +26,9 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import spbau.mit.divan.foodhunter.R;
 import spbau.mit.divan.foodhunter.dishes.Dish;
@@ -45,6 +42,7 @@ public class ShowMap extends FragmentActivity implements OnMapReadyCallback, Goo
     private boolean userWish;
     private String name;
     private EditText searchLine;
+    private LatLng ll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +105,7 @@ public class ShowMap extends FragmentActivity implements OnMapReadyCallback, Goo
         }
         Location location = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
-        LatLng ll = new LatLng(location.getLatitude(),location.getLongitude());
+        ll = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.fromLatLngZoom(ll, (float) 15.5)));
         mMap.addMarker(new MarkerOptions()
                 .anchor(0.0f, 1.0f)
@@ -118,41 +116,9 @@ public class ShowMap extends FragmentActivity implements OnMapReadyCallback, Goo
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (!userWish) {
-                    List<Place> places = new ArrayList<Place>();
-                    Client.getPlacesForNameNearby(places, dataSnapshot, ll, 0.005, name);
-                    List<Marker> markerList = new ArrayList<Marker>();
-                    for (Place place : places) {
-                        markerList.add(mMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(place.latitude, place.longitude))
-                                .title(place.name)));
-                        mMap.setOnInfoWindowClickListener(marker -> {
-                            for (int i = 0; i < markerList.size(); i++) {
-                                if (marker.equals(markerList.get(i))) {
-                                    Intent intent = new Intent(ShowMap.this, PlacePage.class);
-                                    intent.putExtra("place", places.get(i));
-                                    startActivity(intent);
-                                }
-                            }
-                        });
-                    }
+                    ShowPlacesOnMap(dataSnapshot);
                 } else {
-                    List<Dish> dishes = new ArrayList<Dish>();
-                    Client.getDishesForNameNearby(dishes, dataSnapshot, ll, 0.005, name);
-                    List<Marker> markerList = new ArrayList<Marker>();
-                    for (Dish dish : dishes) {
-                        markerList.add(mMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(dish.latitude, dish.longitude))
-                                .title(dish.placeName)));
-                    }
-                    mMap.setOnInfoWindowClickListener(marker -> {
-                        for (int i = 0; i < markerList.size(); i++) {
-                            if (marker.equals(markerList.get(i))) {
-                                Intent intent = new Intent(ShowMap.this, FoodPage.class);
-                                intent.putExtra("dish", dishes.get(i));
-                                startActivity(intent);
-                            }
-                        }
-                    });
+                    ShowDishesOnMap(dataSnapshot);
                 }
             }
 
@@ -175,14 +141,50 @@ public class ShowMap extends FragmentActivity implements OnMapReadyCallback, Goo
 
     public void onFindClick(View view) {
         Intent intent = new Intent(ShowMap.this, ShowMap.class);
-        intent.putExtra("name", ((EditText)findViewById(R.id.search_line)).getText().toString());
+        intent.putExtra("name", ((EditText) findViewById(R.id.search_line)).getText().toString());
         intent.putExtra("foodnotplace", userWish);
         startActivity(intent);
     }
 
     public void onSearchLineClick(View view) {
-        if(searchLine.getText().toString().equals(getResources().getString(R.string.search_line))) {
+        if (searchLine.getText().toString().equals(getResources().getString(R.string.search_line))) {
             searchLine.setText("");
         }
+    }
+
+    private void ShowPlacesOnMap(DataSnapshot dataSnapshot) {
+        List<Place> places = Client.getPlacesForNameNearby(dataSnapshot, ll, 0.005, name)
+                .collect(Collectors.toList());
+        List<Marker> markerList = new ArrayList<Marker>();
+        for (Place place : places) {
+            markerList.add(mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(place.getLatitude(), place.getLongitude()))
+                    .title(place.getName())));
+            mMap.setOnInfoWindowClickListener(marker -> {
+                if (markerList.indexOf(marker) != -1) {
+                    Intent intent = new Intent(ShowMap.this, PlacePage.class);
+                    intent.putExtra("place", places.get(markerList.indexOf(marker)));
+                    startActivity(intent);
+                }
+            });
+        }
+    }
+
+    private void ShowDishesOnMap(DataSnapshot dataSnapshot) {
+        List<Dish> dishes = Client.getDishesForNameNearby(dataSnapshot, ll, 0.005, name)
+                .collect(Collectors.toList());
+        List<Marker> markerList = new ArrayList<Marker>();
+        for (Dish dish : dishes) {
+            markerList.add(mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(dish.getLatitude(), dish.getLongitude()))
+                    .title(dish.getPlaceName())));
+        }
+        mMap.setOnInfoWindowClickListener(marker -> {
+            if (markerList.indexOf(marker) != -1) {
+                Intent intent = new Intent(ShowMap.this, FoodPage.class);
+                intent.putExtra("dish", dishes.get(markerList.indexOf(marker)));
+                startActivity(intent);
+            }
+        });
     }
 }

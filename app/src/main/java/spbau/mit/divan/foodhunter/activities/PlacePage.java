@@ -1,8 +1,8 @@
 package spbau.mit.divan.foodhunter.activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -10,8 +10,6 @@ import android.widget.TextView;
 import spbau.mit.divan.foodhunter.R;
 import spbau.mit.divan.foodhunter.dishes.Place;
 import spbau.mit.divan.foodhunter.net.Client;
-
-import static spbau.mit.divan.foodhunter.R.id.foodRatingBar;
 
 public class PlacePage extends AppCompatActivity {
 
@@ -21,11 +19,11 @@ public class PlacePage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_page);
-        place = (Place)getIntent().getExtras().get("place");
-        ((TextView)findViewById(R.id.placeNameText)).setText(place.name);
-        ((TextView)findViewById(R.id.placeAddressText)).setText(place.address);
-        ((TextView)findViewById(R.id.placeOpenHoursText)).setText(place.openHours);
-        ((RatingBar)findViewById(R.id.placeRatingBar)).setRating((float) place.getRate());
+        place = (Place) getIntent().getExtras().get("place");
+        ((TextView) findViewById(R.id.placeNameText)).setText(place.getName());
+        ((TextView) findViewById(R.id.placeAddressText)).setText(place.getAddress());
+        ((TextView) findViewById(R.id.placeOpenHoursText)).setText(place.getOpenHours());
+        ((RatingBar) findViewById(R.id.placeRatingBar)).setRating((float) place.getRate());
     }
 
     public void onViewReviewsClick(View view) {
@@ -47,7 +45,7 @@ public class PlacePage extends AppCompatActivity {
     }
 
     public void onRatePlaceClick(View view) {
-        Client.setPlaceRate(place, ((RatingBar) findViewById(R.id.placeRatingBar)).getRating());
+        Client.changePlaceRate(place, ((RatingBar) findViewById(R.id.placeRatingBar)).getRating());
     }
 
     public void onShowOnMapClick(View view) {

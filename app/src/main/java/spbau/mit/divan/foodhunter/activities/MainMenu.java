@@ -43,13 +43,13 @@ public class MainMenu extends AppCompatActivity {
 
     public void onFindFoodForNameNearbyClick(View view) {
         Intent intent = new Intent(MainMenu.this, ShowMap.class);
-        intent.putExtra("name",searchLine.getText().toString());
+        intent.putExtra("name", searchLine.getText().toString());
         intent.putExtra("foodnotplace", true);
         startActivity(intent);
     }
 
     public void onSearchLineClick(View view) {
-        if(searchLine.getText().toString().equals(getResources().getString(R.string.search_line))) {
+        if (searchLine.getText().toString().equals(getResources().getString(R.string.search_line))) {
             searchLine.setText("");
         }
     }

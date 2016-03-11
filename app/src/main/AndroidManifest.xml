@@ -27,26 +27,26 @@
         </activity>
         <activity
             android:name=".activities.PlacesListPage"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.PlacePage"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.FoodPage"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.PlaceMenu"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.NewReview"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.ShowMap"
             android:label="@string/title_activity_show_map"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.ReviewsList"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -61,10 +61,12 @@
 
         <activity
             android:name=".activities.DishesListPage"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.ShowOnMap"
-            android:label="@string/title_activity_show_on_map"></activity>
+            android:label="@string/title_activity_show_on_map" />
+        <activity android:name=".activities.AddPlace"></activity>
+        <activity android:name=".activities.AddDish"></activity>
     </application>
 
 </manifest>

@@ -1,6 +1,7 @@
 package spbau.mit.divan.foodhunter.activities;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -17,6 +18,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import spbau.mit.divan.foodhunter.R;
@@ -77,6 +79,7 @@ public class ShowOnMap extends FragmentActivity implements OnMapReadyCallback, G
         Location location = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
         LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
+        LatLng placeLatLng = new LatLng(place.getLatitude(), place.getLongitude());
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.fromLatLngZoom(ll, (float) 15.5)));
         mMap.addMarker(new MarkerOptions()
                 .anchor(0.0f, 1.0f)
@@ -85,8 +88,13 @@ public class ShowOnMap extends FragmentActivity implements OnMapReadyCallback, G
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         mMap.addMarker(new MarkerOptions()
                 .anchor(0.0f, 1.0f)
-                .position(new LatLng(place.getLatitude(), place.getLongitude()))
+                .position(placeLatLng)
                 .title(place.getName()));
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        builder.include(ll);
+        builder.include(placeLatLng);
+        LatLngBounds bounds = builder.build();
+        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
     }
 
     @Override

@@ -100,15 +100,14 @@
         android:layout_alignEnd="@+id/foodAddressText" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Place Page"
         android:id="@+id/placePageButton"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/foodDescriptionText"
-        android:layout_alignEnd="@+id/foodDescriptionText"
-        android:onClick="onPlacePageButtonClick" />
+        android:onClick="onPlacePageButtonClick"
+        android:layout_alignParentRight="true" />
 
 </RelativeLayout>

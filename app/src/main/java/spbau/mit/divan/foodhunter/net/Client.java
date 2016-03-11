@@ -1,8 +1,10 @@
 package spbau.mit.divan.foodhunter.net;
 
+import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -24,10 +26,11 @@ public class Client {
         APP_DATABASE.addListenerForSingleValueEvent(listener);
     }
 
-    public static Stream<Dish> getMenu(DataSnapshot snapshot, Place place) {
+    public static List<Dish> getMenu(DataSnapshot snapshot, Place place) {
         Set<Integer> menuSet = new HashSet<>(place.getMenu());
         return getDishes(snapshot)
-                .filter(dish -> menuSet.contains(dish.getDishId()));
+                .filter(dish -> menuSet.contains(dish.getDishId()))
+                .collect(Collectors.toList());
     }
 
     public static Place getPlace(DataSnapshot snapshot, int id) {
@@ -35,14 +38,16 @@ public class Client {
         return getPlaceFromSnapshot(placeSnapshot);
     }
 
-    public static Stream<Place> getPlacesForNameNearby(DataSnapshot snapshot, LatLng coordinates, double distance, String name) {
-        return getPlacesForName(snapshot, name)
-                .filter(p -> closeEnough(p, coordinates, distance));
+    public static List<Place> getPlacesForNameNearby(DataSnapshot snapshot, LatLng coordinates, double distance, String name) {
+        return Stream.of(getPlacesForName(snapshot, name))
+                .filter(p -> closeEnough(p, coordinates, distance))
+                .collect(Collectors.toList());
     }
 
-    public static Stream<Place> getPlacesForName(DataSnapshot snapshot, String name) {
+    public static List<Place> getPlacesForName(DataSnapshot snapshot, String name) {
         return getPlaces(snapshot)
-                .filter(p -> p.getName().toLowerCase().contains(name.toLowerCase()));
+                .filter(p -> MapObjectNameContainsString(p, name))
+                .collect(Collectors.toList());
     }
 
     private static Stream<Place> getPlaces(DataSnapshot snapshot) {
@@ -50,14 +55,16 @@ public class Client {
                 .map(Client::getPlaceFromSnapshot);
     }
 
-    public static Stream<Dish> getDishesForNameNearby(DataSnapshot snapshot, LatLng coordinates, double distance, String name) {
-        return getDishesForName(snapshot, name)
-                .filter(d -> closeEnough(d, coordinates, distance));
+    public static List<Dish> getDishesForNameNearby(DataSnapshot snapshot, LatLng coordinates, double distance, String name) {
+        return Stream.of(getDishesForName(snapshot, name))
+                .filter(d -> closeEnough(d, coordinates, distance))
+                .collect(Collectors.toList());
     }
 
-    public static Stream<Dish> getDishesForName(DataSnapshot snapshot, String name) {
+    public static List<Dish> getDishesForName(DataSnapshot snapshot, String name) {
         return getDishes(snapshot)
-                .filter(d -> d.getName().toLowerCase().contains(name.toLowerCase()));
+                .filter(d -> MapObjectNameContainsString(d, name))
+                .collect(Collectors.toList());
     }
 
     private static Stream<Dish> getDishes(DataSnapshot snapshot) {
@@ -87,6 +94,43 @@ public class Client {
         APP_DATABASE.child("places").child(Integer.toString(place.getId())).child("reviews").push().setValue(review);
     }
 
+    public static void pushPlace(String name, String address, String openHours, double lat, double lng) {
+        request(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int id = (int) dataSnapshot.child("places").getChildrenCount() + 1;
+                Place place = new Place(name, address, openHours, new ArrayList<>(), new ArrayList<>(), 0, 0, lat, lng, id);
+                APP_DATABASE.child("places").child(Integer.toString(id)).setValue(place);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+
+    public static void pushDish(int price, String name, String address, String description, double lat, double lng, String placeName, int placeId) {
+        request(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int id = (int) dataSnapshot.child("places").getChildrenCount() + 1;
+                Dish dish = new Dish(price, name, description, id, placeId, placeName, address, 0, 0, lat, lng);
+                APP_DATABASE.child("dishes").child(Integer.toString(id)).setValue(dish);
+                APP_DATABASE.child("places").child(Integer.toString(placeId)).child("menu").push().setValue(id);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+
+    private static boolean closeEnough(MapObject mapObject, LatLng coordinates, double distance) {
+        return Math.pow(mapObject.getLatitude() - coordinates.latitude, 2) + Math.pow(mapObject.getLongitude() - coordinates.longitude, 2) < distance;
+    }
+
     private static Place getPlaceFromSnapshot(DataSnapshot placeSnapshot) {
         String name = placeSnapshot.child("name").getValue(String.class);
         String openHours = placeSnapshot.child("openHours").getValue(String.class);
@@ -105,7 +149,7 @@ public class Client {
         return new Place(name, address, openHours, menu, reviews, rate, rateIndex, latitude, longitude, id);
     }
 
-    private static boolean closeEnough(MapObject mapObject, LatLng coordinates, double distance) {
-        return Math.pow(mapObject.getLatitude() - coordinates.latitude, 2) + Math.pow(mapObject.getLongitude() - coordinates.longitude, 2) < distance;
+    private static boolean MapObjectNameContainsString(MapObject mapObject, String name) {
+        return mapObject.getName().toLowerCase().replaceAll(" ", "").contains(name.toLowerCase().replaceAll(" ", ""));
     }
 }

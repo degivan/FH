@@ -24,6 +24,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -116,9 +117,9 @@ public class ShowMap extends FragmentActivity implements OnMapReadyCallback, Goo
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (!userWish) {
-                    ShowPlacesOnMap(dataSnapshot);
+                    showPlacesOnMap(dataSnapshot);
                 } else {
-                    ShowDishesOnMap(dataSnapshot);
+                    showDishesOnMap(dataSnapshot);
                 }
             }
 
@@ -146,34 +147,29 @@ public class ShowMap extends FragmentActivity implements OnMapReadyCallback, Goo
         startActivity(intent);
     }
 
-    public void onSearchLineClick(View view) {
-        if (searchLine.getText().toString().equals(getResources().getString(R.string.search_line))) {
-            searchLine.setText("");
-        }
-    }
-
-    private void ShowPlacesOnMap(DataSnapshot dataSnapshot) {
-        List<Place> places = Client.getPlacesForNameNearby(dataSnapshot, ll, 0.005, name)
-                .collect(Collectors.toList());
-        List<Marker> markerList = new ArrayList<Marker>();
+    private void showPlacesOnMap(DataSnapshot dataSnapshot) {
+        List<Place> places = Client.getPlacesForNameNearby(dataSnapshot, ll, 0.005, name);
+        List<Marker> markerList = new ArrayList<>();
         for (Place place : places) {
             markerList.add(mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(place.getLatitude(), place.getLongitude()))
                     .title(place.getName())));
-            mMap.setOnInfoWindowClickListener(marker -> {
-                if (markerList.indexOf(marker) != -1) {
-                    Intent intent = new Intent(ShowMap.this, PlacePage.class);
-                    intent.putExtra("place", places.get(markerList.indexOf(marker)));
-                    startActivity(intent);
-                }
-            });
         }
+        mMap.setOnInfoWindowClickListener(marker -> {
+            if (markerList.indexOf(marker) != -1) {
+                Intent intent = new Intent(ShowMap.this, PlacePage.class);
+                intent.putExtra("place", places.get(markerList.indexOf(marker)));
+                startActivity(intent);
+            }
+        });
+
+        zoomToFit(markerList);
+
     }
 
-    private void ShowDishesOnMap(DataSnapshot dataSnapshot) {
-        List<Dish> dishes = Client.getDishesForNameNearby(dataSnapshot, ll, 0.005, name)
-                .collect(Collectors.toList());
-        List<Marker> markerList = new ArrayList<Marker>();
+    private void showDishesOnMap(DataSnapshot dataSnapshot) {
+        List<Dish> dishes = Client.getDishesForNameNearby(dataSnapshot, ll, 0.005, name);
+        List<Marker> markerList = new ArrayList<>();
         for (Dish dish : dishes) {
             markerList.add(mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(dish.getLatitude(), dish.getLongitude()))
@@ -186,5 +182,31 @@ public class ShowMap extends FragmentActivity implements OnMapReadyCallback, Goo
                 startActivity(intent);
             }
         });
+
+        zoomToFit(markerList);
+    }
+
+    private void zoomToFit(List<Marker> markerList) {
+        if (markerList.size() == 0) return;
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        builder.include(ll);
+        for (Marker marker : markerList)
+            builder.include(marker.getPosition());
+        LatLngBounds bounds = builder.build();
+        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
+    }
+
+    public void onSearchLineClick(View view) {
+        if (searchLine.getText().toString().equals(getResources().getString(R.string.search_line))) {
+            searchLine.setText("");
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(ShowMap.this, MainMenu.class);
+        intent.putExtra("searchText", searchLine.getText().toString());
+        startActivity(intent);
+        finish();
     }
 }

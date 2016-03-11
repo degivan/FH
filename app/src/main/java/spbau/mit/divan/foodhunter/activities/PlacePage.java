@@ -53,4 +53,10 @@ public class PlacePage extends AppCompatActivity {
         intent.putExtra("place", place);
         startActivity(intent);
     }
+
+    public void onAddNewDishClick(View view) {
+        Intent intent = new Intent(PlacePage.this, AddDish.class);
+        intent.putExtra("place", place);
+        startActivity(intent);
+    }
 }

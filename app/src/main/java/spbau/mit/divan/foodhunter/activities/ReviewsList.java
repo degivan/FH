@@ -20,7 +20,7 @@ public class ReviewsList extends AppCompatActivity {
         setContentView(R.layout.activity_reviews_list);
         ListView listView = (ListView) findViewById(R.id.reviews_list);
         reviewsList = ((Place) getIntent().getSerializableExtra("place")).getReviews();
-        if (reviewsList.size() == 0) {
+        if (reviewsList.isEmpty()) {
             findViewById(R.id.no_result).setVisibility(View.VISIBLE);
         } else {
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.simple_list_item_1, reviewsList);

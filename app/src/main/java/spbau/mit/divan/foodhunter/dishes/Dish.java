@@ -18,12 +18,27 @@ public class Dish implements Serializable, MapObject {
     private double latitude;
     private double longitude;
 
-    public int getPrice() {
-        return price;
+    public Dish() {
     }
 
-    public String getName() {
-        return name;
+    public Dish(int price, String name, String description,
+                int dishId, int placeId, String placeName,
+                String address, double rate, int rateIndex, double latitude, double longitude) {
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.dishId = dishId;
+        this.placeId = placeId;
+        this.placeName = placeName;
+        this.address = address;
+        this.rate = rate;
+        this.rateIndex = rateIndex;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    public int getPrice() {
+        return price;
     }
 
     public String getDescription() {
@@ -56,6 +71,11 @@ public class Dish implements Serializable, MapObject {
     }
 
     @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
     public double getLatitude() {
         return latitude;
     }
@@ -64,8 +84,6 @@ public class Dish implements Serializable, MapObject {
     public double getLongitude() {
         return longitude;
     }
-
-    public Dish() {}
 
     public void setRate(float mark) {
         rate = (rateIndex * rate + mark) / (rateIndex + 1);

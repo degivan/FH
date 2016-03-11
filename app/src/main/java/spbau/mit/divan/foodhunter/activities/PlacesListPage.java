@@ -2,16 +2,13 @@ package spbau.mit.divan.foodhunter.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 
 import spbau.mit.divan.foodhunter.R;
 import spbau.mit.divan.foodhunter.net.Client;
 
-public class PlacesListPage extends AppCompatActivity {
-
-    private EditText searchLine;
+public class PlacesListPage extends ActivityWithSearchLine {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +26,11 @@ public class PlacesListPage extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void onSearchLineClick(View view) {
-        if (searchLine.getText().toString().equals(getResources().getString(R.string.search_line))) {
-            searchLine.setText("");
-        }
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(PlacesListPage.this, MainMenu.class);
+        intent.putExtra("searchText", searchLine.getText().toString());
+        startActivity(intent);
+        finish();
     }
 }

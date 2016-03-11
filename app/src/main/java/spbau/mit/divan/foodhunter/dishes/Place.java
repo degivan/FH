@@ -18,6 +18,20 @@ public class Place implements Serializable, MapObject {
     private double latitude;
     private double longitude;
 
+    public Place(String name, String address, String openHours, List<Integer> menu,
+                 List<String> reviews, double rate, int rateIndex, double latitude, double longitude, int id) {
+        this.name = name;
+        this.openHours = openHours;
+        this.menu = menu;
+        this.reviews = reviews;
+        this.rate = rate;
+        this.rateIndex = rateIndex;
+        this.id = id;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
     @Override
     public String getAddress() {
         return address;
@@ -33,6 +47,7 @@ public class Place implements Serializable, MapObject {
         return longitude;
     }
 
+    @Override
     public String getName() {
         return name;
     }
@@ -57,23 +72,8 @@ public class Place implements Serializable, MapObject {
         return rate;
     }
 
-
     public List<String> getReviews() {
         return reviews;
-    }
-
-    public Place(String name, String address, String openHours, List<Integer> menu,
-                 List<String> reviews, double rate, int rateIndex, double latitude, double longitude, int id) {
-        this.name = name;
-        this.openHours = openHours;
-        this.menu = menu;
-        this.reviews = reviews;
-        this.rate = rate;
-        this.rateIndex = rateIndex;
-        this.id = id;
-        this.address = address;
-        this.latitude = latitude;
-        this.longitude = longitude;
     }
 
     public void setRate(float mark) {

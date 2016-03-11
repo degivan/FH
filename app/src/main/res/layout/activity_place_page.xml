@@ -66,7 +66,7 @@
         android:onClick="onRatePlaceClick" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="view reviews"
         android:id="@+id/viewReviewsButton"
@@ -81,7 +81,7 @@
         android:layout_alignEnd="@+id/placeRateButton" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="write a review"
         android:id="@+id/writeReviewButton"
@@ -90,13 +90,13 @@
         android:clickable="true"
         android:enabled="true"
         android:onClick="onWriteReviewClick"
-        android:layout_alignRight="@+id/placeRateButton"
-        android:layout_alignEnd="@+id/placeRateButton"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/viewReviewsButton"
+        android:layout_alignEnd="@+id/viewReviewsButton" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="view menu"
         android:id="@+id/viewMenuButton"
@@ -110,7 +110,7 @@
         android:layout_alignEnd="@+id/placeRateButton" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Show on Map"
         android:id="@+id/showOnMapButton"
@@ -121,5 +121,19 @@
         android:layout_alignRight="@+id/placeRateButton"
         android:layout_alignEnd="@+id/placeRateButton"
         android:onClick="onShowOnMapClick" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Add new dish"
+        android:id="@+id/addNewDishButton"
+        android:layout_below="@+id/showOnMapButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/showOnMapButton"
+        android:layout_marginTop="55dp"
+        android:onClick="onAddNewDishClick"
+        android:layout_alignRight="@+id/showOnMapButton"
+        android:layout_alignEnd="@+id/showOnMapButton" />
 
 </RelativeLayout>

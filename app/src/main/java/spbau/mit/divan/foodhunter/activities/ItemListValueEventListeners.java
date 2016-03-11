@@ -38,8 +38,7 @@ public class ItemListValueEventListeners {
         return new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                List<Dish> menu = Client.getMenu(dataSnapshot, place)
-                        .collect(Collectors.toList());
+                List<Dish> menu = Client.getMenu(dataSnapshot, place);
                 ListAdapter adapter = new ItemsAdapter(context, menu);
                 setList(menu, context, adapter, FoodPage.class, "dish");
             }
@@ -55,8 +54,7 @@ public class ItemListValueEventListeners {
         return new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                List<Place> places = Client.getPlacesForName(dataSnapshot, placeName)
-                        .collect(Collectors.toList());
+                List<Place> places = Client.getPlacesForName(dataSnapshot, placeName);
                 ListAdapter adapter = new ItemsAdapter(places, context);
                 setList(places, context, adapter, PlacePage.class, "place");
             }
@@ -72,8 +70,7 @@ public class ItemListValueEventListeners {
         return new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                List<Dish> dishes = Client.getDishesForName(dataSnapshot, dishName)
-                        .collect(Collectors.toList());
+                List<Dish> dishes = Client.getDishesForName(dataSnapshot, dishName);
                 ListAdapter adapter = new ItemsAdapter(context, dishes);
                 setList(dishes, context, adapter, FoodPage.class, "dish");
             }

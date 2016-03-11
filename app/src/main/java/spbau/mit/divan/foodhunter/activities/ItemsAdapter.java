@@ -18,33 +18,51 @@ import spbau.mit.divan.foodhunter.dishes.Place;
 
 public class ItemsAdapter extends BaseAdapter {
     Activity context;
-    List<String> titles = new ArrayList<>();
-    List<String> descriptions = new ArrayList<>();
-    List<String> additionalInfo = new ArrayList<>();
+    List<Item> items = new ArrayList<>();
+
+    static class Item {
+        private String title;
+        private String description;
+        private String additionalInfo;
+
+        public Item(String title, String description, String additionalInfo) {
+            this.title = title;
+            this.description = description;
+            this.additionalInfo = additionalInfo;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public String getAdditionalInfo() {
+            return additionalInfo;
+        }
+    }
 
     public ItemsAdapter(List<Place> places, Activity context) {
         super();
         this.context = context;
-        Stream.of(places).forEach(p -> {
-            titles.add(p.getName());
-            descriptions.add(p.getAddress());
-            additionalInfo.add(Double.toString(Math.round(p.getRate())) + "/5");
-        });
+        for (Place p: places) {
+            items.add(new Item(p.getName(), p.getAddress(), Double.toString(Math.round(p.getRate())) + "/5"));
+        }
     }
 
     public ItemsAdapter(Activity context, List<Dish> dishes) {
         super();
         this.context = context;
-        Stream.of(dishes).forEach(d -> {
-            titles.add(d.getName());
-            descriptions.add(d.getAddress() + " " + d.getPlaceName());
-            additionalInfo.add(Integer.toString(d.getPrice()));
-        });
+        for (Dish d: dishes) {
+            items.add(new Item(d.getName(), d.getAddress() + " " + d.getPlaceName(), Integer.toString(d.getPrice())));
+        }
     }
 
     @Override
     public int getCount() {
-        return titles.size();
+        return items.size();
     }
 
     @Override
@@ -79,9 +97,9 @@ public class ItemsAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.txtViewTitle.setText(titles.get(position));
-        holder.txtViewDescription.setText(descriptions.get(position));
-        holder.txtViewAdditionalInfo.setText(additionalInfo.get(position));
+        holder.txtViewTitle.setText(items.get(position).getTitle());
+        holder.txtViewDescription.setText(items.get(position).getDescription());
+        holder.txtViewAdditionalInfo.setText(items.get(position).getAdditionalInfo());
 
         return convertView;
     }

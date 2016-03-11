@@ -6,4 +6,6 @@ public interface MapObject {
     double getLongitude();
 
     String getAddress();
+
+    String getName();
 }

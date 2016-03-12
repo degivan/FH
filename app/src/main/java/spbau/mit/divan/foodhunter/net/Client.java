@@ -111,20 +111,20 @@ public class Client {
     }
 
     public static void pushDish(int price, String name, String address, String description, double lat, double lng, String placeName, int placeId) {
-        request(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                int id = (int) dataSnapshot.child("places").getChildrenCount() + 1;
-                Dish dish = new Dish(price, name, description, id, placeId, placeName, address, 0, 0, lat, lng);
-                APP_DATABASE.child("dishes").child(Integer.toString(id)).setValue(dish);
-                APP_DATABASE.child("places").child(Integer.toString(placeId)).child("menu").push().setValue(id);
-            }
+       request(new ValueEventListener() {
+           @Override
+           public void onDataChange(DataSnapshot dataSnapshot) {
+               int id = (int) dataSnapshot.child("places").getChildrenCount() + 1;
+               Dish dish = new Dish(price, name, description, id, placeId, placeName, address, 0, 0, lat, lng);
+               APP_DATABASE.child("dishes").child(Integer.toString(id)).setValue(dish);
+               APP_DATABASE.child("places").child(Integer.toString(placeId)).child("menu").push().setValue(id);
+           }
 
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
+           @Override
+           public void onCancelled(FirebaseError firebaseError) {
 
-            }
-        });
+           }
+       });
     }
 
     private static boolean closeEnough(MapObject mapObject, LatLng coordinates, double distance) {

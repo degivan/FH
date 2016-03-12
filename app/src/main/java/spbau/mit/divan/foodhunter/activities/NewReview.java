@@ -9,15 +9,16 @@ import spbau.mit.divan.foodhunter.R;
 import spbau.mit.divan.foodhunter.dishes.Place;
 import spbau.mit.divan.foodhunter.net.Client;
 
-public class NewReview extends AppCompatActivity {
+import static spbau.mit.divan.foodhunter.activities.Uses.PLACE;
 
+public class NewReview extends AppCompatActivity {
     private Place place;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_review);
-        place = (Place) getIntent().getExtras().get("place");
+        place = (Place) getIntent().getExtras().get(PLACE);
     }
 
     public void onSendReviewClick(View view) {

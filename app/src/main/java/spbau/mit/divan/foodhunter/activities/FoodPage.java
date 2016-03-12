@@ -16,6 +16,8 @@ import spbau.mit.divan.foodhunter.dishes.Dish;
 import spbau.mit.divan.foodhunter.net.Client;
 
 import static spbau.mit.divan.foodhunter.R.id.foodRatingBar;
+import static spbau.mit.divan.foodhunter.activities.Uses.DISH;
+import static spbau.mit.divan.foodhunter.activities.Uses.PLACE;
 
 public class FoodPage extends AppCompatActivity {
     private Dish dish;
@@ -25,12 +27,13 @@ public class FoodPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_food_page);
-        dish = (Dish) getIntent().getExtras().get("dish");
+        dish = (Dish) getIntent().getExtras().get(DISH);
         ((TextView) findViewById(R.id.foodNameText)).setText(dish.getName());
         ((TextView) findViewById(R.id.foodPlaceNameText)).setText(dish.getPlaceName());
         ((TextView) findViewById(R.id.foodAddressText)).setText(dish.getAddress());
-        ((TextView) findViewById(R.id.priceText)).setText(dish.getPrice() + " rub");
-        ((TextView) findViewById(R.id.foodOpenHoursText)).setText("8.00-23.00");//add openHours to dish class
+        ((TextView) findViewById(R.id.priceText)).setText(new StringBuilder()
+                .append(String.valueOf(dish.getPrice()))
+                .append(" rub").toString());
         ((TextView) findViewById(R.id.foodDescriptionText)).setText(dish.getDescription());
         ((RatingBar) findViewById(R.id.foodRatingBar)).setRating((float) dish.getRate());
     }
@@ -44,7 +47,7 @@ public class FoodPage extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Intent intent = new Intent(FoodPage.this, PlacePage.class);
-                intent.putExtra("place", Client.getPlace(dataSnapshot, dish.getPlaceId()));
+                intent.putExtra(PLACE, Client.getPlace(dataSnapshot, dish.getPlaceId()));
                 startActivity(intent);
             }
 

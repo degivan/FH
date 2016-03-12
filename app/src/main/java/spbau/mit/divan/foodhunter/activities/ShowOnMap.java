@@ -1,7 +1,6 @@
 package spbau.mit.divan.foodhunter.activities;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -24,8 +23,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import spbau.mit.divan.foodhunter.R;
 import spbau.mit.divan.foodhunter.dishes.Place;
 
-public class ShowOnMap extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+import static spbau.mit.divan.foodhunter.activities.Uses.PLACE;
+import static spbau.mit.divan.foodhunter.activities.Uses.showToast;
 
+public class ShowOnMap extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
     private Place place;
@@ -43,7 +44,7 @@ public class ShowOnMap extends FragmentActivity implements OnMapReadyCallback, G
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-        place = (Place) getIntent().getSerializableExtra("place");
+        place = (Place) getIntent().getSerializableExtra(PLACE);
     }
 
     @Override
@@ -66,13 +67,7 @@ public class ShowOnMap extends FragmentActivity implements OnMapReadyCallback, G
     public void onConnected(Bundle bundle) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    public void requestPermissions(@NonNull String[] permissions, int requestCode)
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for Activity#requestPermissions for more details.
+                showToast(getApplicationContext(), "Need access to current location");
                 return;
             }
         }

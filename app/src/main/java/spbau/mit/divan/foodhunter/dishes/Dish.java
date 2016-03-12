@@ -2,9 +2,6 @@ package spbau.mit.divan.foodhunter.dishes;
 
 import java.io.Serializable;
 
-/**
- * Created by Ксения on 08.02.2016.
- */
 public class Dish implements Serializable, MapObject {
     private int price;
     private String name;
@@ -18,8 +15,7 @@ public class Dish implements Serializable, MapObject {
     private double latitude;
     private double longitude;
 
-    public Dish() {
-    }
+    public Dish() {}
 
     public Dish(int price, String name, String description,
                 int dishId, int placeId, String placeName,

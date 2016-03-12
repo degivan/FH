@@ -11,15 +11,16 @@ import spbau.mit.divan.foodhunter.R;
 import spbau.mit.divan.foodhunter.dishes.Place;
 import spbau.mit.divan.foodhunter.net.Client;
 
-public class PlacePage extends AppCompatActivity {
+import static spbau.mit.divan.foodhunter.activities.Uses.PLACE;
 
+public class PlacePage extends AppCompatActivity {
     private Place place;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_page);
-        place = (Place) getIntent().getExtras().get("place");
+        place = (Place) getIntent().getExtras().get(PLACE);
         ((TextView) findViewById(R.id.placeNameText)).setText(place.getName());
         ((TextView) findViewById(R.id.placeAddressText)).setText(place.getAddress());
         ((TextView) findViewById(R.id.placeOpenHoursText)).setText(place.getOpenHours());
@@ -28,19 +29,19 @@ public class PlacePage extends AppCompatActivity {
 
     public void onViewReviewsClick(View view) {
         Intent intent = new Intent(PlacePage.this, ReviewsList.class);
-        intent.putExtra("place", place);
+        intent.putExtra(PLACE, place);
         startActivity(intent);
     }
 
     public void onWriteReviewClick(View view) {
         Intent intent = new Intent(PlacePage.this, NewReview.class);
-        intent.putExtra("place", place);
+        intent.putExtra(PLACE, place);
         startActivity(intent);
     }
 
     public void onViewMenuClick(View view) {
         Intent intent = new Intent(PlacePage.this, PlaceMenu.class);
-        intent.putExtra("place", place);
+        intent.putExtra(PLACE, place);
         startActivity(intent);
     }
 
@@ -50,13 +51,13 @@ public class PlacePage extends AppCompatActivity {
 
     public void onShowOnMapClick(View view) {
         Intent intent = new Intent(PlacePage.this, ShowOnMap.class);
-        intent.putExtra("place", place);
+        intent.putExtra(PLACE, place);
         startActivity(intent);
     }
 
     public void onAddNewDishClick(View view) {
         Intent intent = new Intent(PlacePage.this, AddDish.class);
-        intent.putExtra("place", place);
+        intent.putExtra(PLACE, place);
         startActivity(intent);
     }
 }

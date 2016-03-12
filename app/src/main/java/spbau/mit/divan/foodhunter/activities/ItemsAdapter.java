@@ -7,9 +7,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import spbau.mit.divan.foodhunter.R;
@@ -17,8 +17,8 @@ import spbau.mit.divan.foodhunter.dishes.Dish;
 import spbau.mit.divan.foodhunter.dishes.Place;
 
 public class ItemsAdapter extends BaseAdapter {
-    Activity context;
-    List<Item> items = new ArrayList<>();
+    private Activity context;
+    private List<Item> items;
 
     static class Item {
         private String title;
@@ -47,17 +47,17 @@ public class ItemsAdapter extends BaseAdapter {
     public ItemsAdapter(List<Place> places, Activity context) {
         super();
         this.context = context;
-        for (Place p: places) {
-            items.add(new Item(p.getName(), p.getAddress(), Double.toString(Math.round(p.getRate())) + "/5"));
-        }
+        items = Stream.of(places)
+                .map(p -> new Item(p.getName(), p.getAddress(), Double.toString(Math.round(p.getRate())) + "/5"))
+                .collect(Collectors.toList());
     }
 
     public ItemsAdapter(Activity context, List<Dish> dishes) {
         super();
         this.context = context;
-        for (Dish d: dishes) {
-            items.add(new Item(d.getName(), d.getAddress() + " " + d.getPlaceName(), Integer.toString(d.getPrice())));
-        }
+        items = Stream.of(dishes)
+                .map(d -> new Item(d.getName(), d.getAddress() + " " + d.getPlaceName(), Integer.toString(d.getPrice())))
+                .collect(Collectors.toList());
     }
 
     @Override

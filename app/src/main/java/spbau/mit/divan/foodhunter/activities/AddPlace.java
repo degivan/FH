@@ -1,14 +1,15 @@
 package spbau.mit.divan.foodhunter.activities;
 
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import spbau.mit.divan.foodhunter.R;
 import spbau.mit.divan.foodhunter.net.Client;
 
-app.Ap CompatActivity;
+import static spbau.mit.divan.foodhunter.activities.Uses.CORRECT_COORDINATES;
+import static spbau.mit.divan.foodhunter.activities.Uses.showToast;
 
 public class AddPlace extends AppCompatActivity {
 
@@ -24,12 +25,11 @@ public class AddPlace extends AppCompatActivity {
         String openHours = ((TextView) findViewById(R.id.newPlaceOpenHrs)).getText().toString();
         String latitude = ((TextView) findViewById(R.id.newPlaceLatitude)).getText().toString();
         String longitude = ((TextView) findViewById(R.id.newPlaceLongitude)).getText().toString();
-        if (latitude.matches("-?\\d+(\\.\\d+)?") && longitude.matches("-?\\d+(\\.\\d+)?")) {
+        if (latitude.matches(CORRECT_COORDINATES) && longitude.matches(CORRECT_COORDINATES)) {
             Client.pushPlace(name, address, openHours, Double.parseDouble(latitude), Double.parseDouble(longitude));
             finish();
         } else {
-            Toast toast = Toast.makeText(getApplicationContext(), "Incorrect coordinates", Toast.LENGTH_LONG);
-            toast.show();
+            showToast(getApplicationContext(), "Incorrect coordinates");
         }
     }
 }

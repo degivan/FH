@@ -1,15 +1,17 @@
 package spbau.mit.divan.foodhunter.activities;
 
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import spbau.mit.divan.foodhunter.R;
 import spbau.mit.divan.foodhunter.dishes.Place;
 import spbau.mit.divan.foodhunter.net.Client;
 
-app.Ap CompatActivity;
+import static spbau.mit.divan.foodhunter.activities.Uses.CORRECT_PRICE;
+import static spbau.mit.divan.foodhunter.activities.Uses.PLACE;
+import static spbau.mit.divan.foodhunter.activities.Uses.showToast;
 
 public class AddDish extends AppCompatActivity {
 
@@ -20,17 +22,16 @@ public class AddDish extends AppCompatActivity {
     }
 
     public void onAddNewDishClick(View view) {
-        Place place = (Place) getIntent().getSerializableExtra("place");
+        Place place = (Place) getIntent().getSerializableExtra(PLACE);
         String name = ((TextView) findViewById(R.id.newDishName)).getText().toString();
         String description = ((TextView) findViewById(R.id.newDishDescription)).getText().toString();
         String price = ((TextView) findViewById(R.id.newDishPrice)).getText().toString();
-        if (price.matches("^-?\\d+$")) {
+        if (price.matches(CORRECT_PRICE)) {
             Client.pushDish(Integer.parseInt(price), name, place.getAddress(), description,
                     place.getLatitude(), place.getLongitude(), place.getName(), place.getId());
             finish();
         } else {
-            Toast toast = Toast.makeText(getApplicationContext(), "Incorrect price", Toast.LENGTH_LONG);
-            toast.show();
+            showToast(getApplicationContext(), "Incorrect price.");
         }
     }
 }

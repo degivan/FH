@@ -11,15 +11,16 @@ import java.util.List;
 import spbau.mit.divan.foodhunter.R;
 import spbau.mit.divan.foodhunter.dishes.Place;
 
+import static spbau.mit.divan.foodhunter.activities.Uses.PLACE;
+
 public class ReviewsList extends AppCompatActivity {
-    private List<String> reviewsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reviews_list);
         ListView listView = (ListView) findViewById(R.id.reviews_list);
-        reviewsList = ((Place) getIntent().getSerializableExtra("place")).getReviews();
+        List<String> reviewsList = ((Place) getIntent().getSerializableExtra(PLACE)).getReviews();
         if (reviewsList.isEmpty()) {
             findViewById(R.id.no_result).setVisibility(View.VISIBLE);
         } else {

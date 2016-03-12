@@ -15,7 +15,8 @@ public class Dish implements Serializable, MapObject {
     private double latitude;
     private double longitude;
 
-    public Dish() {}
+    public Dish() {
+    }
 
     public Dish(int price, String name, String description,
                 int dishId, int placeId, String placeName,

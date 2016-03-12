@@ -7,7 +7,7 @@ import spbau.mit.divan.foodhunter.R;
 import spbau.mit.divan.foodhunter.dishes.Place;
 import spbau.mit.divan.foodhunter.net.Client;
 
-import static spbau.mit.divan.foodhunter.activities.Uses.PLACE;
+import static spbau.mit.divan.foodhunter.activities.ExtraNames.PLACE_EXTRA_NAME;
 
 public class PlaceMenu extends AppCompatActivity {
 
@@ -15,7 +15,7 @@ public class PlaceMenu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_menu);
-        Place place = (Place) getIntent().getSerializableExtra(PLACE);
+        Place place = (Place) getIntent().getSerializableExtra(PLACE_EXTRA_NAME);
         Client.request(ItemListValueEventListeners.menuListener(place, this));
     }
 }

@@ -1,7 +1,8 @@
 package spbau.mit.divan.foodhunter.dishes;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class Place implements Serializable, MapObject {
     private String name;
@@ -12,11 +13,14 @@ public class Place implements Serializable, MapObject {
     private String address;
     private double latitude;
     private double longitude;
-    private List<Integer> menu;
-    private List<String> reviews;
+    private Collection<Integer> menu;
+    private Collection<String> reviews;
 
-    public Place(String name, String address, String openHours, List<Integer> menu,
-                 List<String> reviews, double rate, int rateIndex, double latitude, double longitude, int id) {
+    public Place() {
+    }
+
+    public Place(String name, String address, String openHours, Collection<Integer> menu,
+                 Collection<String> reviews, double rate, int rateIndex, double latitude, double longitude, int id) {
         this.name = name;
         this.openHours = openHours;
         this.rate = rate;
@@ -65,20 +69,37 @@ public class Place implements Serializable, MapObject {
         return longitude;
     }
 
-    public List<Integer> getMenu() {
+    public Collection<Integer> getMenu() {
+        if (menu == null) {
+            menu = new ArrayList<>();
+        }
         return menu;
     }
 
-    public List<String> getReviews() {
+    public Collection<String> getReviews() {
+        if (reviews == null) {
+            reviews = new ArrayList<>();
+        }
         return reviews;
     }
 
     public void sendReview(String review) {
+        if (reviews == null) {
+            reviews = new ArrayList<>();
+        }
         reviews.add(review);
     }
 
     public void setRate(float mark) {
         rate = (rateIndex * rate + mark) / (rateIndex + 1);
         rateIndex++;
+    }
+
+
+    public void addDishToMenu(int id) {
+        if (menu == null) {
+            menu = new ArrayList<>();
+        }
+        menu.add(id);
     }
 }

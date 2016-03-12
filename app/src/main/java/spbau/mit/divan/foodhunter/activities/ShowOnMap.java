@@ -23,8 +23,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import spbau.mit.divan.foodhunter.R;
 import spbau.mit.divan.foodhunter.dishes.Place;
 
-import static spbau.mit.divan.foodhunter.activities.Uses.PLACE;
-import static spbau.mit.divan.foodhunter.activities.Uses.showToast;
+import static spbau.mit.divan.foodhunter.activities.ExtraNames.PLACE_EXTRA_NAME;
+import static spbau.mit.divan.foodhunter.activities.FoodHunterUtil.showToast;
 
 public class ShowOnMap extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private GoogleMap mMap;
@@ -44,7 +44,7 @@ public class ShowOnMap extends FragmentActivity implements OnMapReadyCallback, G
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-        place = (Place) getIntent().getSerializableExtra(PLACE);
+        place = (Place) getIntent().getSerializableExtra(PLACE_EXTRA_NAME);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class ShowOnMap extends FragmentActivity implements OnMapReadyCallback, G
     public void onConnected(Bundle bundle) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                showToast(getApplicationContext(), "Need access to current location");
+                showToast(getApplicationContext(), getResources().getString(R.string.m_need_access_location));
                 return;
             }
         }
@@ -79,7 +79,7 @@ public class ShowOnMap extends FragmentActivity implements OnMapReadyCallback, G
         mMap.addMarker(new MarkerOptions()
                 .anchor(0.0f, 1.0f)
                 .position(ll)
-                .title("You are here")
+                .title(getResources().getString(R.string.map_user_location))
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         mMap.addMarker(new MarkerOptions()
                 .anchor(0.0f, 1.0f)

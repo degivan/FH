@@ -91,7 +91,7 @@ public class Client {
 
     public static void sendReview(Place place, String review) {
         place.sendReview(review);
-        APP_DATABASE.child("places").child(Integer.toString(place.getId())).child("reviews").push().setValue(review);
+        APP_DATABASE.child("places").child(Integer.toString(place.getId())).child("reviews").setValue(place.getReviews());
     }
 
     public static void pushPlace(String name, String address, String openHours, double lat, double lng) {
@@ -110,21 +110,23 @@ public class Client {
         });
     }
 
-    public static void pushDish(int price, String name, String address, String description, double lat, double lng, String placeName, int placeId) {
-       request(new ValueEventListener() {
-           @Override
-           public void onDataChange(DataSnapshot dataSnapshot) {
-               int id = (int) dataSnapshot.child("places").getChildrenCount() + 1;
-               Dish dish = new Dish(price, name, description, id, placeId, placeName, address, 0, 0, lat, lng);
-               APP_DATABASE.child("dishes").child(Integer.toString(id)).setValue(dish);
-               APP_DATABASE.child("places").child(Integer.toString(placeId)).child("menu").push().setValue(id);
-           }
+    public static void pushDish(int price, String name, String description, Place place) {
+        request(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int id = (int) dataSnapshot.child("dishes").getChildrenCount() + 1;
+                Dish dish = new Dish(price, name, description, id, place.getId(), place.getName(),
+                        place.getAddress(), 0, 0, place.getLatitude(), place.getLongitude());
+                place.addDishToMenu(id);
+                APP_DATABASE.child("dishes").child(Integer.toString(id)).setValue(dish);
+                APP_DATABASE.child("places").child(Integer.toString(place.getId())).child("menu").setValue(place.getMenu());
+            }
 
-           @Override
-           public void onCancelled(FirebaseError firebaseError) {
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
 
-           }
-       });
+            }
+        });
     }
 
     private static boolean closeEnough(MapObject mapObject, LatLng coordinates, double distance) {
@@ -132,24 +134,11 @@ public class Client {
     }
 
     private static Place getPlaceFromSnapshot(DataSnapshot placeSnapshot) {
-        String name = placeSnapshot.child("name").getValue(String.class);
-        String openHours = placeSnapshot.child("openHours").getValue(String.class);
-        String address = placeSnapshot.child("address").getValue(String.class);
-        List<Integer> menu = new ArrayList<>();
-        for (DataSnapshot dishSnapshot : placeSnapshot.child("menu").getChildren())
-            menu.add(dishSnapshot.getValue(Integer.class));
-        List<String> reviews = new ArrayList<>();
-        for (DataSnapshot reviewSnapshot : placeSnapshot.child("reviews").getChildren())
-            reviews.add(reviewSnapshot.getValue(String.class));
-        double latitude = placeSnapshot.child("latitude").getValue(Double.class);
-        double longitude = placeSnapshot.child("longitude").getValue(Double.class);
-        int id = placeSnapshot.child("id").getValue(Integer.class);
-        double rate = placeSnapshot.child("rate").getValue(Double.class);
-        int rateIndex = placeSnapshot.child("rateIndex").getValue(Integer.class);
-        return new Place(name, address, openHours, menu, reviews, rate, rateIndex, latitude, longitude, id);
+        return placeSnapshot.getValue(Place.class);
     }
 
     private static boolean MapObjectNameContainsString(MapObject mapObject, String name) {
         return mapObject.getName().toLowerCase().replaceAll(" ", "").contains(name.toLowerCase().replaceAll(" ", ""));
     }
+
 }

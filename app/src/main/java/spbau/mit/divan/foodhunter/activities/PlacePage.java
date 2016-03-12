@@ -11,7 +11,7 @@ import spbau.mit.divan.foodhunter.R;
 import spbau.mit.divan.foodhunter.dishes.Place;
 import spbau.mit.divan.foodhunter.net.Client;
 
-import static spbau.mit.divan.foodhunter.activities.Uses.PLACE;
+import static spbau.mit.divan.foodhunter.activities.ExtraNames.PLACE_EXTRA_NAME;
 
 public class PlacePage extends AppCompatActivity {
     private Place place;
@@ -20,7 +20,7 @@ public class PlacePage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_page);
-        place = (Place) getIntent().getExtras().get(PLACE);
+        place = (Place) getIntent().getExtras().get(PLACE_EXTRA_NAME);
         ((TextView) findViewById(R.id.placeNameText)).setText(place.getName());
         ((TextView) findViewById(R.id.placeAddressText)).setText(place.getAddress());
         ((TextView) findViewById(R.id.placeOpenHoursText)).setText(place.getOpenHours());
@@ -29,19 +29,20 @@ public class PlacePage extends AppCompatActivity {
 
     public void onViewReviewsClick(View view) {
         Intent intent = new Intent(PlacePage.this, ReviewsList.class);
-        intent.putExtra(PLACE, place);
+        intent.putExtra(PLACE_EXTRA_NAME, place);
         startActivity(intent);
     }
 
     public void onWriteReviewClick(View view) {
         Intent intent = new Intent(PlacePage.this, NewReview.class);
-        intent.putExtra(PLACE, place);
+        intent.putExtra(PLACE_EXTRA_NAME, place);
         startActivity(intent);
+        finish();
     }
 
     public void onViewMenuClick(View view) {
         Intent intent = new Intent(PlacePage.this, PlaceMenu.class);
-        intent.putExtra(PLACE, place);
+        intent.putExtra(PLACE_EXTRA_NAME, place);
         startActivity(intent);
     }
 
@@ -51,13 +52,14 @@ public class PlacePage extends AppCompatActivity {
 
     public void onShowOnMapClick(View view) {
         Intent intent = new Intent(PlacePage.this, ShowOnMap.class);
-        intent.putExtra(PLACE, place);
+        intent.putExtra(PLACE_EXTRA_NAME, place);
         startActivity(intent);
     }
 
     public void onAddNewDishClick(View view) {
         Intent intent = new Intent(PlacePage.this, AddDish.class);
-        intent.putExtra(PLACE, place);
+        intent.putExtra(PLACE_EXTRA_NAME, place);
         startActivity(intent);
+        finish();
     }
 }

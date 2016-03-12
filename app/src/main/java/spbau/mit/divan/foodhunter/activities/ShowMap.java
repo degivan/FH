@@ -36,18 +36,19 @@ import spbau.mit.divan.foodhunter.dishes.Dish;
 import spbau.mit.divan.foodhunter.dishes.Place;
 import spbau.mit.divan.foodhunter.net.Client;
 
-import static spbau.mit.divan.foodhunter.activities.Uses.DISH;
-import static spbau.mit.divan.foodhunter.activities.Uses.FOOD_OR_PLACE;
-import static spbau.mit.divan.foodhunter.activities.Uses.PLACE;
-import static spbau.mit.divan.foodhunter.activities.Uses.SEARCH_TEXT;
-import static spbau.mit.divan.foodhunter.activities.Uses.SearchChoice.SEARCH_PLACE;
-import static spbau.mit.divan.foodhunter.activities.Uses.clearEditText;
-import static spbau.mit.divan.foodhunter.activities.Uses.showToast;
+import static spbau.mit.divan.foodhunter.activities.ExtraNames.DISH_EXTRA_NAME;
+import static spbau.mit.divan.foodhunter.activities.ExtraNames.PLACE_EXTRA_NAME;
+import static spbau.mit.divan.foodhunter.activities.ExtraNames.SEARCH_CHOICE_EXTRA_NAME;
+import static spbau.mit.divan.foodhunter.activities.ExtraNames.SEARCH_TEXT_EXTRA_NAME;
+import static spbau.mit.divan.foodhunter.activities.FoodHunterUtil.clearEditText;
+import static spbau.mit.divan.foodhunter.activities.FoodHunterUtil.showToast;
 
 public class ShowMap extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+    public enum SearchChoice {SEARCH_FOOD, SEARCH_PLACE}
+
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
-    private Uses.SearchChoice searchChoice;
+    private SearchChoice searchChoice;
     private String name;
     private EditText searchLine;
     private LatLng ll;
@@ -60,8 +61,8 @@ public class ShowMap extends FragmentActivity implements OnMapReadyCallback, Goo
                 .findFragmentById(R.id.map);
         mMap = mapFragment.getMap();
         mapFragment.getMapAsync(this);
-        name = getIntent().getStringExtra(SEARCH_TEXT);
-        searchChoice = (Uses.SearchChoice) getIntent().getSerializableExtra(FOOD_OR_PLACE);
+        name = getIntent().getStringExtra(SEARCH_TEXT_EXTRA_NAME);
+        searchChoice = (SearchChoice) getIntent().getSerializableExtra(SEARCH_CHOICE_EXTRA_NAME);
         searchLine = ((EditText) findViewById(R.id.search_line));
         searchLine.setText(name);
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -101,7 +102,7 @@ public class ShowMap extends FragmentActivity implements OnMapReadyCallback, Goo
     public void onConnected(Bundle bundle) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                showToast(getApplicationContext(), "Need access to current location");
+                showToast(getApplicationContext(), getResources().getString(R.string.m_need_access_location));
                 return;
             }
         }
@@ -112,12 +113,12 @@ public class ShowMap extends FragmentActivity implements OnMapReadyCallback, Goo
         mMap.addMarker(new MarkerOptions()
                 .anchor(0.0f, 1.0f)
                 .position(ll)
-                .title("You are here")
+                .title(getResources().getString(R.string.map_user_location))
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         Client.request(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (searchChoice == SEARCH_PLACE) {
+                if (searchChoice == SearchChoice.SEARCH_PLACE) {
                     showPlacesOnMap(dataSnapshot);
                 } else {
                     showDishesOnMap(dataSnapshot);
@@ -143,8 +144,8 @@ public class ShowMap extends FragmentActivity implements OnMapReadyCallback, Goo
 
     public void onFindClick(View view) {
         Intent intent = new Intent(ShowMap.this, ShowMap.class);
-        intent.putExtra(SEARCH_TEXT, ((EditText) findViewById(R.id.search_line)).getText().toString());
-        intent.putExtra(FOOD_OR_PLACE, searchChoice);
+        intent.putExtra(SEARCH_TEXT_EXTRA_NAME, ((EditText) findViewById(R.id.search_line)).getText().toString());
+        intent.putExtra(SEARCH_CHOICE_EXTRA_NAME, searchChoice);
         startActivity(intent);
     }
 
@@ -152,13 +153,13 @@ public class ShowMap extends FragmentActivity implements OnMapReadyCallback, Goo
         List<Place> places = Client.getPlacesForNameNearby(dataSnapshot, ll, 0.005, name);
         List<Marker> markerList = Stream.of(places)
                 .map(p -> mMap.addMarker(new MarkerOptions()
-                                    .position(new LatLng(p.getLatitude(), p.getLongitude()))
-                                    .title(p.getName())))
+                        .position(new LatLng(p.getLatitude(), p.getLongitude()))
+                        .title(p.getName())))
                 .collect(Collectors.toList());
         mMap.setOnInfoWindowClickListener(marker -> {
             if (markerList.indexOf(marker) != -1) {
                 Intent intent = new Intent(ShowMap.this, PlacePage.class);
-                intent.putExtra(PLACE, places.get(markerList.indexOf(marker)));
+                intent.putExtra(PLACE_EXTRA_NAME, places.get(markerList.indexOf(marker)));
                 startActivity(intent);
             }
         });
@@ -171,13 +172,13 @@ public class ShowMap extends FragmentActivity implements OnMapReadyCallback, Goo
         List<Dish> dishes = Client.getDishesForNameNearby(dataSnapshot, ll, 0.005, name);
         List<Marker> markerList = Stream.of(dishes)
                 .map(d -> mMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(d.getLatitude(), d.getLongitude()))
-                                .title(d.getPlaceName())))
+                        .position(new LatLng(d.getLatitude(), d.getLongitude()))
+                        .title(d.getPlaceName())))
                 .collect(Collectors.toList());
         mMap.setOnInfoWindowClickListener(marker -> {
             if (markerList.indexOf(marker) != -1) {
                 Intent intent = new Intent(ShowMap.this, FoodPage.class);
-                intent.putExtra(DISH, dishes.get(markerList.indexOf(marker)));
+                intent.putExtra(DISH_EXTRA_NAME, dishes.get(markerList.indexOf(marker)));
                 startActivity(intent);
             }
         });
@@ -202,7 +203,7 @@ public class ShowMap extends FragmentActivity implements OnMapReadyCallback, Goo
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(ShowMap.this, MainMenu.class);
-        intent.putExtra(SEARCH_TEXT, searchLine.getText().toString());
+        intent.putExtra(SEARCH_TEXT_EXTRA_NAME, searchLine.getText().toString());
         startActivity(intent);
         finish();
     }

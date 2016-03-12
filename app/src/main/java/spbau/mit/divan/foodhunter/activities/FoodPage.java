@@ -16,8 +16,8 @@ import spbau.mit.divan.foodhunter.dishes.Dish;
 import spbau.mit.divan.foodhunter.net.Client;
 
 import static spbau.mit.divan.foodhunter.R.id.foodRatingBar;
-import static spbau.mit.divan.foodhunter.activities.Uses.DISH;
-import static spbau.mit.divan.foodhunter.activities.Uses.PLACE;
+import static spbau.mit.divan.foodhunter.activities.ExtraNames.DISH_EXTRA_NAME;
+import static spbau.mit.divan.foodhunter.activities.ExtraNames.PLACE_EXTRA_NAME;
 
 public class FoodPage extends AppCompatActivity {
     private Dish dish;
@@ -27,7 +27,7 @@ public class FoodPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_food_page);
-        dish = (Dish) getIntent().getExtras().get(DISH);
+        dish = (Dish) getIntent().getExtras().get(DISH_EXTRA_NAME);
         ((TextView) findViewById(R.id.foodNameText)).setText(dish.getName());
         ((TextView) findViewById(R.id.foodPlaceNameText)).setText(dish.getPlaceName());
         ((TextView) findViewById(R.id.foodAddressText)).setText(dish.getAddress());
@@ -47,7 +47,7 @@ public class FoodPage extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Intent intent = new Intent(FoodPage.this, PlacePage.class);
-                intent.putExtra(PLACE, Client.getPlace(dataSnapshot, dish.getPlaceId()));
+                intent.putExtra(PLACE_EXTRA_NAME, Client.getPlace(dataSnapshot, dish.getPlaceId()));
                 startActivity(intent);
             }
 

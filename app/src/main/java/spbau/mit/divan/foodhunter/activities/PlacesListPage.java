@@ -9,8 +9,8 @@ import android.widget.EditText;
 import spbau.mit.divan.foodhunter.R;
 import spbau.mit.divan.foodhunter.net.Client;
 
-import static spbau.mit.divan.foodhunter.activities.Uses.SEARCH_TEXT;
-import static spbau.mit.divan.foodhunter.activities.Uses.clearEditText;
+import static spbau.mit.divan.foodhunter.activities.ExtraNames.SEARCH_TEXT_EXTRA_NAME;
+import static spbau.mit.divan.foodhunter.activities.FoodHunterUtil.clearEditText;
 
 public class PlacesListPage extends AppCompatActivity {
     private EditText searchLine;
@@ -19,7 +19,7 @@ public class PlacesListPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_places_list_page);
-        String placeName = getIntent().getStringExtra(SEARCH_TEXT);
+        String placeName = getIntent().getStringExtra(SEARCH_TEXT_EXTRA_NAME);
         searchLine = (EditText) findViewById(R.id.placesSearchLine);
         searchLine.setText(placeName);
         Client.request(ItemListValueEventListeners.placesListListener(placeName, this));
@@ -27,14 +27,14 @@ public class PlacesListPage extends AppCompatActivity {
 
     public void onFindPlacesClick(View view) {
         Intent intent = new Intent(PlacesListPage.this, PlacesListPage.class);
-        intent.putExtra(SEARCH_TEXT, ((EditText) findViewById(R.id.placesSearchLine)).getText().toString());
+        intent.putExtra(SEARCH_TEXT_EXTRA_NAME, ((EditText) findViewById(R.id.placesSearchLine)).getText().toString());
         startActivity(intent);
     }
 
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(PlacesListPage.this, MainMenu.class);
-        intent.putExtra(SEARCH_TEXT, searchLine.getText().toString());
+        intent.putExtra(SEARCH_TEXT_EXTRA_NAME, searchLine.getText().toString());
         startActivity(intent);
         finish();
     }

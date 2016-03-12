@@ -10,11 +10,9 @@ import com.firebase.client.Firebase;
 
 import spbau.mit.divan.foodhunter.R;
 
-import static spbau.mit.divan.foodhunter.activities.Uses.FOOD_OR_PLACE;
-import static spbau.mit.divan.foodhunter.activities.Uses.SEARCH_TEXT;
-import static spbau.mit.divan.foodhunter.activities.Uses.SearchChoice.SEARCH_FOOD;
-import static spbau.mit.divan.foodhunter.activities.Uses.SearchChoice.SEARCH_PLACE;
-import static spbau.mit.divan.foodhunter.activities.Uses.clearEditText;
+import static spbau.mit.divan.foodhunter.activities.ExtraNames.SEARCH_CHOICE_EXTRA_NAME;
+import static spbau.mit.divan.foodhunter.activities.ExtraNames.SEARCH_TEXT_EXTRA_NAME;
+import static spbau.mit.divan.foodhunter.activities.FoodHunterUtil.clearEditText;
 
 public class MainMenu extends AppCompatActivity {
     private EditText searchLine;
@@ -25,7 +23,7 @@ public class MainMenu extends AppCompatActivity {
         Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_main_menu);
         searchLine = (EditText) findViewById(R.id.search_line);
-        String searchText = getIntent().getStringExtra(SEARCH_TEXT);
+        String searchText = getIntent().getStringExtra(SEARCH_TEXT_EXTRA_NAME);
         if (searchText != null) {
             searchLine.setText(searchText);
         }
@@ -33,30 +31,30 @@ public class MainMenu extends AppCompatActivity {
 
     public void onFindPlaceForNameClick(View view) {
         Intent intent = new Intent(MainMenu.this, PlacesListPage.class);
-        intent.putExtra(SEARCH_TEXT, searchLine.getText().toString());
+        intent.putExtra(SEARCH_TEXT_EXTRA_NAME, searchLine.getText().toString());
         startActivity(intent);
         finish();
     }
 
     public void onFindFoodForNameClick(View view) {
         Intent intent = new Intent(MainMenu.this, DishesListPage.class);
-        intent.putExtra(SEARCH_TEXT, searchLine.getText().toString());
+        intent.putExtra(SEARCH_TEXT_EXTRA_NAME, searchLine.getText().toString());
         startActivity(intent);
         finish();
     }
 
     public void onFindPlaceForNameNearbyClick(View view) {
         Intent intent = new Intent(MainMenu.this, ShowMap.class);
-        intent.putExtra(SEARCH_TEXT, searchLine.getText().toString());
-        intent.putExtra(FOOD_OR_PLACE, SEARCH_PLACE);
+        intent.putExtra(SEARCH_TEXT_EXTRA_NAME, searchLine.getText().toString());
+        intent.putExtra(SEARCH_CHOICE_EXTRA_NAME, ShowMap.SearchChoice.SEARCH_PLACE);
         startActivity(intent);
         finish();
     }
 
     public void onFindFoodForNameNearbyClick(View view) {
         Intent intent = new Intent(MainMenu.this, ShowMap.class);
-        intent.putExtra(SEARCH_TEXT, searchLine.getText().toString());
-        intent.putExtra(FOOD_OR_PLACE, SEARCH_FOOD);
+        intent.putExtra(SEARCH_TEXT_EXTRA_NAME, searchLine.getText().toString());
+        intent.putExtra(SEARCH_CHOICE_EXTRA_NAME, ShowMap.SearchChoice.SEARCH_FOOD);
         startActivity(intent);
         finish();
     }
@@ -74,5 +72,12 @@ public class MainMenu extends AppCompatActivity {
 
     public void onSearchLineClick(View view) {
         clearEditText(searchLine);
+    }
+
+    public void onShowAllPlacesClick(View view) {
+        Intent intent = new Intent(MainMenu.this, PlacesListPage.class);
+        intent.putExtra(SEARCH_TEXT_EXTRA_NAME, getResources().getString(R.string.empty));
+        startActivity(intent);
+        finish();
     }
 }

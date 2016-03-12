@@ -19,8 +19,8 @@ import spbau.mit.divan.foodhunter.dishes.MapObject;
 import spbau.mit.divan.foodhunter.dishes.Place;
 import spbau.mit.divan.foodhunter.net.Client;
 
-import static spbau.mit.divan.foodhunter.activities.Uses.DISH;
-import static spbau.mit.divan.foodhunter.activities.Uses.PLACE;
+import static spbau.mit.divan.foodhunter.activities.ExtraNames.DISH_EXTRA_NAME;
+import static spbau.mit.divan.foodhunter.activities.ExtraNames.PLACE_EXTRA_NAME;
 
 public class ItemListValueEventListeners {
     public static ValueEventListener menuListener(Place place, Activity context) {
@@ -29,7 +29,7 @@ public class ItemListValueEventListeners {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Dish> menu = Client.getMenu(dataSnapshot, place);
                 ListAdapter adapter = new ItemsAdapter(context, menu);
-                setList(menu, context, adapter, FoodPage.class, DISH);
+                setList(menu, context, adapter, FoodPage.class, DISH_EXTRA_NAME);
             }
 
             @Override
@@ -45,7 +45,7 @@ public class ItemListValueEventListeners {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Place> places = Client.getPlacesForName(dataSnapshot, placeName);
                 ListAdapter adapter = new ItemsAdapter(places, context);
-                setList(places, context, adapter, PlacePage.class, PLACE);
+                setList(places, context, adapter, PlacePage.class, PLACE_EXTRA_NAME);
             }
 
             @Override
@@ -61,7 +61,7 @@ public class ItemListValueEventListeners {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Dish> dishes = Client.getDishesForName(dataSnapshot, dishName);
                 ListAdapter adapter = new ItemsAdapter(context, dishes);
-                setList(dishes, context, adapter, FoodPage.class, DISH);
+                setList(dishes, context, adapter, FoodPage.class, DISH_EXTRA_NAME);
             }
 
             @Override

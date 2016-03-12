@@ -1,17 +1,17 @@
 package spbau.mit.divan.foodhunter.activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
 import spbau.mit.divan.foodhunter.R;
 import spbau.mit.divan.foodhunter.net.Client;
 
-import static spbau.mit.divan.foodhunter.activities.Uses.CORRECT_COORDINATES;
-import static spbau.mit.divan.foodhunter.activities.Uses.showToast;
+import static spbau.mit.divan.foodhunter.activities.FoodHunterUtil.showToast;
 
 public class AddPlace extends AppCompatActivity {
+    private static final String CORRECT_COORDINATES = "-?\\d+(\\.\\d+)?";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +29,7 @@ public class AddPlace extends AppCompatActivity {
             Client.pushPlace(name, address, openHours, Double.parseDouble(latitude), Double.parseDouble(longitude));
             finish();
         } else {
-            showToast(getApplicationContext(), "Incorrect coordinates");
+            showToast(getApplicationContext(), getResources().getString(R.string.m_incorrect_coordinates));
         }
     }
 }

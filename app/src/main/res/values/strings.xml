@@ -13,4 +13,13 @@
     <string name="bc_find_food_for_name_nearby">onFindFoodForNameNearbyClick</string>
     <string name="no_result">No results found.</string>
     <string name="title_activity_show_on_map">Map</string>
+    <string name="b_show_all_places">Show all places</string>
+    <string name="b_add_new_place">Add new place</string>
+
+    <string name="m_incorrect_coordinates">Incorrect coordinates.</string>
+    <string name="m_need_access_location">Need access to current location.</string>
+    <string name="m_incorrect_price">Incorrect price.</string>
+
+    <string name="map_user_location">You are here.</string>
+    <string name="empty"></string>
 </resources>

@@ -60,6 +60,7 @@ public class ItemsAdapter extends BaseAdapter {
                 .collect(Collectors.toList());
     }
 
+
     @Override
     public int getCount() {
         return items.size();

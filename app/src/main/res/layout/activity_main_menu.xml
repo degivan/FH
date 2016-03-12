@@ -66,9 +66,19 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Add new place"
+        android:text="@string/b_add_new_place"
         android:id="@+id/b_add_new_place"
         android:onClick="onAddNewPlaceClick"
         android:layout_alignTop="@+id/b_find_food_for_name_nearby"
         android:layout_marginTop="60dp" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/b_show_all_places"
+        android:layout_below="@+id/b_add_new_place"
+        android:layout_alignTop="@+id/b_add_new_place"
+        android:layout_marginTop="60dp"
+        android:id="@+id/b_show_all_places"
+        android:onClick="onShowAllPlacesClick" />
 </RelativeLayout>

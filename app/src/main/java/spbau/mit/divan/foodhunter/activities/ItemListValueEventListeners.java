@@ -47,7 +47,7 @@ public class ItemListValueEventListeners {
     private static <T extends MapObject> ValueEventListener itemsListListener(Activity context, String extra, Class<?> nextActivity,
                                                                               Function<DataSnapshot, List<T>> infoGetter,
                                                                               Function<T, Item> converter) {
-        return Client.getListener(dataSnapshot -> {
+        return Client.createOnDataChangeListener(dataSnapshot -> {
             List<T> mapObjects = infoGetter.apply(dataSnapshot);
             List<Item> items = Stream.of(mapObjects)
                     .map(converter::apply)

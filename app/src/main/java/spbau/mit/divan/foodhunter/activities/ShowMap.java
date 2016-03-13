@@ -115,19 +115,11 @@ public class ShowMap extends FragmentActivity implements OnMapReadyCallback, Goo
                 .position(ll)
                 .title(getResources().getString(R.string.map_user_location))
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-        Client.request(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (searchChoice == SearchChoice.SEARCH_PLACE) {
-                    showPlacesOnMap(dataSnapshot);
-                } else {
-                    showDishesOnMap(dataSnapshot);
-                }
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
+        Client.request(snapshot -> {
+            if (searchChoice == SearchChoice.SEARCH_PLACE) {
+                showPlacesOnMap(snapshot);
+            } else {
+                showDishesOnMap(snapshot);
             }
         });
     }

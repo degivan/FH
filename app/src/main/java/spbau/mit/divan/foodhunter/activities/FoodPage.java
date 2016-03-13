@@ -7,10 +7,6 @@ import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
-
 import spbau.mit.divan.foodhunter.R;
 import spbau.mit.divan.foodhunter.dishes.Dish;
 import spbau.mit.divan.foodhunter.net.Client;
@@ -45,18 +41,10 @@ public class FoodPage extends AppCompatActivity {
     }
 
     public void onPlacePageButtonClick(View view) {
-        Client.request(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Intent intent = new Intent(FoodPage.this, PlacePage.class);
-                intent.putExtra(PLACE_EXTRA_NAME, Client.getPlace(dataSnapshot, dish.getPlaceId()));
-                startActivity(intent);
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
+        Client.request(snapshot -> {
+            Intent intent = new Intent(FoodPage.this, PlacePage.class);
+            intent.putExtra(PLACE_EXTRA_NAME, Client.getPlace(snapshot, dish.getPlaceId()));
+            startActivity(intent);
         });
     }
 

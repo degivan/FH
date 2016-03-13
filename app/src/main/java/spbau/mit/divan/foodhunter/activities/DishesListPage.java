@@ -20,14 +20,14 @@ public class DishesListPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dishes_list_page);
         String dishName = getIntent().getStringExtra(SEARCH_TEXT_EXTRA_NAME);
-        searchLine = (EditText) findViewById(R.id.dishesSearchLine);
+        searchLine = (EditText) findViewById(R.id.searchLine);
         searchLine.setText(dishName);
         Client.request(ItemListValueEventListeners.dishesListListener(dishName, this));
     }
 
     public void onFindDishesClick(View view) {
         Intent intent = new Intent(DishesListPage.this, DishesListPage.class);
-        intent.putExtra(SEARCH_TEXT_EXTRA_NAME, ((EditText) findViewById(R.id.dishesSearchLine)).getText().toString());
+        intent.putExtra(SEARCH_TEXT_EXTRA_NAME, ((EditText) findViewById(R.id.searchLine)).getText().toString());
         startActivity(intent);
     }
 

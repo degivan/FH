@@ -2,6 +2,7 @@ package spbau.mit.divan.foodhunter.net;
 
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
+import com.annimon.stream.function.Consumer;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -20,10 +21,24 @@ import spbau.mit.divan.foodhunter.dishes.MapObject;
 import spbau.mit.divan.foodhunter.dishes.Place;
 
 public class Client {
-    private static final Firebase APP_DATABASE = new Firebase("https://blistering-fire-6963.firebaseio.com/");
+    private static final Firebase APP_DATABASE = new Firebase("https://food-hunter.firebaseio.com/");
 
     public static void request(ValueEventListener listener) {
         APP_DATABASE.addListenerForSingleValueEvent(listener);
+    }
+
+    public static ValueEventListener getListener(Consumer<DataSnapshot> consumer) {
+        return new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                consumer.accept(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        };
     }
 
     public static List<Dish> getMenu(DataSnapshot snapshot, Place place) {
@@ -73,7 +88,7 @@ public class Client {
     }
 
     public static void changeDishRate(Dish dish, float rate) {
-        dish.setRate(rate);
+        dish.changeRate(rate);
         Map<String, Object> rateChanges = new HashMap<>();
         rateChanges.put("rate", dish.getRate());
         rateChanges.put("rateIndex", dish.getRateIndex());
@@ -95,38 +110,22 @@ public class Client {
     }
 
     public static void pushPlace(String name, String address, String openHours, double lat, double lng) {
-        request(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                int id = (int) dataSnapshot.child("places").getChildrenCount() + 1;
-                Place place = new Place(name, address, openHours, new ArrayList<>(), new ArrayList<>(), 0, 0, lat, lng, id);
-                APP_DATABASE.child("places").child(Integer.toString(id)).setValue(place);
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
+        request(getListener(snapshot -> {
+            int id = (int) snapshot.child("places").getChildrenCount() + 1;
+            Place place = new Place(name, address, openHours, new ArrayList<>(), new ArrayList<>(), 0, 0, lat, lng, id);
+            APP_DATABASE.child("places").child(Integer.toString(id)).setValue(place);
+        }));
     }
 
     public static void pushDish(int price, String name, String description, Place place) {
-        request(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                int id = (int) dataSnapshot.child("dishes").getChildrenCount() + 1;
-                Dish dish = new Dish(price, name, description, id, place.getId(), place.getName(),
-                        place.getAddress(), 0, 0, place.getLatitude(), place.getLongitude());
-                place.addDishToMenu(id);
-                APP_DATABASE.child("dishes").child(Integer.toString(id)).setValue(dish);
-                APP_DATABASE.child("places").child(Integer.toString(place.getId())).child("menu").setValue(place.getMenu());
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
+        request(getListener(snapshot -> {
+            int id = (int) snapshot.child("dishes").getChildrenCount() + 1;
+            Dish dish = new Dish(price, name, description, id, place.getId(), place.getName(),
+                    place.getAddress(), 0, 0, place.getLatitude(), place.getLongitude());
+            place.addDishToMenu(id);
+            APP_DATABASE.child("dishes").child(Integer.toString(id)).setValue(dish);
+            APP_DATABASE.child("places").child(Integer.toString(place.getId())).child("menu").setValue(place.getMenu());
+        }));
     }
 
     private static boolean closeEnough(MapObject mapObject, LatLng coordinates, double distance) {

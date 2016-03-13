@@ -49,7 +49,7 @@
     <RatingBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/placeRatingBar"
+        android:id="@+id/ratingBar"
         android:layout_below="@+id/placeOpenHoursText"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -60,7 +60,7 @@
         android:layout_height="wrap_content"
         android:text="rate"
         android:id="@+id/placeRateButton"
-        android:layout_alignBottom="@+id/placeRatingBar"
+        android:layout_alignBottom="@+id/ratingBar"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:onClick="onRatePlaceClick" />
@@ -135,5 +135,15 @@
         android:onClick="onAddNewDishClick"
         android:layout_alignRight="@+id/showOnMapButton"
         android:layout_alignEnd="@+id/showOnMapButton" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/t_place_rate_index"
+        android:id="@+id/rateIndexText"
+        android:layout_alignTop="@+id/ratingBar"
+        android:layout_marginTop="50dp"
+        android:layout_alignParentLeft="true" />
 
 </RelativeLayout>

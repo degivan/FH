@@ -42,10 +42,12 @@ public class Place implements Serializable, MapObject {
         return openHours;
     }
 
+    @Override
     public double getRate() {
         return rate;
     }
 
+    @Override
     public int getRateIndex() {
         return rateIndex;
     }

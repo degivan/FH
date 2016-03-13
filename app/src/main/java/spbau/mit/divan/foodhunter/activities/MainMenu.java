@@ -22,7 +22,7 @@ public class MainMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_main_menu);
-        searchLine = (EditText) findViewById(R.id.search_line);
+        searchLine = (EditText) findViewById(R.id.searchLine);
         String searchText = getIntent().getStringExtra(SEARCH_TEXT_EXTRA_NAME);
         if (searchText != null) {
             searchLine.setText(searchText);
@@ -62,7 +62,6 @@ public class MainMenu extends AppCompatActivity {
     public void onAddNewPlaceClick(View view) {
         Intent intent = new Intent(MainMenu.this, AddPlace.class);
         startActivity(intent);
-        finish();
     }
 
     @Override
@@ -70,14 +69,14 @@ public class MainMenu extends AppCompatActivity {
         finish();
     }
 
-    public void onSearchLineClick(View view) {
-        clearEditText(searchLine);
-    }
-
     public void onShowAllPlacesClick(View view) {
         Intent intent = new Intent(MainMenu.this, PlacesListPage.class);
         intent.putExtra(SEARCH_TEXT_EXTRA_NAME, getResources().getString(R.string.empty));
         startActivity(intent);
         finish();
+    }
+
+    public void onSearchLineClick(View view) {
+        clearEditText(searchLine);
     }
 }

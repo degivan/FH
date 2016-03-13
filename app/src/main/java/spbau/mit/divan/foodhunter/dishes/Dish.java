@@ -54,10 +54,12 @@ public class Dish implements Serializable, MapObject {
         return placeName;
     }
 
+    @Override
     public double getRate() {
         return rate;
     }
 
+    @Override
     public int getRateIndex() {
         return rateIndex;
     }
@@ -82,7 +84,7 @@ public class Dish implements Serializable, MapObject {
         return longitude;
     }
 
-    public void setRate(float mark) {
+    public void changeRate(float mark) {
         rate = (rateIndex * rate + mark) / (rateIndex + 1);
         rateIndex++;
     }

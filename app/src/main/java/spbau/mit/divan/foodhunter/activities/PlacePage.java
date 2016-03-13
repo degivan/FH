@@ -12,6 +12,7 @@ import spbau.mit.divan.foodhunter.dishes.Place;
 import spbau.mit.divan.foodhunter.net.Client;
 
 import static spbau.mit.divan.foodhunter.activities.ExtraNames.PLACE_EXTRA_NAME;
+import static spbau.mit.divan.foodhunter.activities.FoodHunterUtil.displayMapObjectRate;
 
 public class PlacePage extends AppCompatActivity {
     private Place place;
@@ -24,7 +25,7 @@ public class PlacePage extends AppCompatActivity {
         ((TextView) findViewById(R.id.placeNameText)).setText(place.getName());
         ((TextView) findViewById(R.id.placeAddressText)).setText(place.getAddress());
         ((TextView) findViewById(R.id.placeOpenHoursText)).setText(place.getOpenHours());
-        ((RatingBar) findViewById(R.id.placeRatingBar)).setRating((float) place.getRate());
+        displayRate();
     }
 
     public void onViewReviewsClick(View view) {
@@ -47,7 +48,8 @@ public class PlacePage extends AppCompatActivity {
     }
 
     public void onRatePlaceClick(View view) {
-        Client.changePlaceRate(place, ((RatingBar) findViewById(R.id.placeRatingBar)).getRating());
+        Client.changePlaceRate(place, ((RatingBar) findViewById(R.id.ratingBar)).getRating());
+        displayRate();
     }
 
     public void onShowOnMapClick(View view) {
@@ -61,5 +63,9 @@ public class PlacePage extends AppCompatActivity {
         intent.putExtra(PLACE_EXTRA_NAME, place);
         startActivity(intent);
         finish();
+    }
+
+    private void displayRate() {
+        displayMapObjectRate(place, this, getResources().getString(R.string.t_place_rate_index));
     }
 }

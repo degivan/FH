@@ -64,9 +64,16 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.ShowOnMap"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_show_on_map" />
-        <activity android:name=".activities.AddPlace"></activity>
-        <activity android:name=".activities.AddDish"></activity>
+        <activity
+            android:name=".activities.AddPlace"
+            android:screenOrientation="portrait">
+
+        </activity>
+        <activity
+            android:name=".activities.AddDish"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

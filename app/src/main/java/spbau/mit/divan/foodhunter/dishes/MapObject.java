@@ -5,7 +5,13 @@ public interface MapObject {
 
     double getLongitude();
 
+    double getRate();
+
+    int getRateIndex();
+
     String getAddress();
 
     String getName();
+
+
 }

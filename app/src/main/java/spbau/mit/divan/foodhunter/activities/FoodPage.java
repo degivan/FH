@@ -15,9 +15,10 @@ import spbau.mit.divan.foodhunter.R;
 import spbau.mit.divan.foodhunter.dishes.Dish;
 import spbau.mit.divan.foodhunter.net.Client;
 
-import static spbau.mit.divan.foodhunter.R.id.foodRatingBar;
+import static spbau.mit.divan.foodhunter.R.id.ratingBar;
 import static spbau.mit.divan.foodhunter.activities.ExtraNames.DISH_EXTRA_NAME;
 import static spbau.mit.divan.foodhunter.activities.ExtraNames.PLACE_EXTRA_NAME;
+import static spbau.mit.divan.foodhunter.activities.FoodHunterUtil.displayMapObjectRate;
 
 public class FoodPage extends AppCompatActivity {
     private Dish dish;
@@ -35,11 +36,12 @@ public class FoodPage extends AppCompatActivity {
                 .append(String.valueOf(dish.getPrice()))
                 .append(" rub").toString());
         ((TextView) findViewById(R.id.foodDescriptionText)).setText(dish.getDescription());
-        ((RatingBar) findViewById(R.id.foodRatingBar)).setRating((float) dish.getRate());
+        displayRate();
     }
 
     public void onFoodRateClick(View view) {
-        Client.changeDishRate(dish, ((RatingBar) findViewById(foodRatingBar)).getRating());
+        Client.changeDishRate(dish, ((RatingBar) findViewById(ratingBar)).getRating());
+        displayRate();
     }
 
     public void onPlacePageButtonClick(View view) {
@@ -56,5 +58,9 @@ public class FoodPage extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void displayRate() {
+        displayMapObjectRate(dish, this, getResources().getString(R.string.t_food_rate_index));
     }
 }

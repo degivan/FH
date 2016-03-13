@@ -6,69 +6,55 @@ import android.view.View;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import com.annimon.stream.Collectors;
+import com.annimon.stream.Stream;
+import com.annimon.stream.function.Function;
 import com.firebase.client.DataSnapshot;
-import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 import java.io.Serializable;
 import java.util.List;
 
 import spbau.mit.divan.foodhunter.R;
-import spbau.mit.divan.foodhunter.dishes.Dish;
+import spbau.mit.divan.foodhunter.activities.ItemsAdapter.Item;
 import spbau.mit.divan.foodhunter.dishes.MapObject;
 import spbau.mit.divan.foodhunter.dishes.Place;
 import spbau.mit.divan.foodhunter.net.Client;
 
+import static java.lang.Math.round;
 import static spbau.mit.divan.foodhunter.activities.ExtraNames.DISH_EXTRA_NAME;
 import static spbau.mit.divan.foodhunter.activities.ExtraNames.PLACE_EXTRA_NAME;
 
 public class ItemListValueEventListeners {
     public static ValueEventListener menuListener(Place place, Activity context) {
-        return new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                List<Dish> menu = Client.getMenu(dataSnapshot, place);
-                ListAdapter adapter = new ItemsAdapter(context, menu);
-                setList(menu, context, adapter, FoodPage.class, DISH_EXTRA_NAME);
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        };
+        return itemsListListener(context, DISH_EXTRA_NAME, FoodPage.class,
+                snapshot -> Client.getMenu(snapshot, place),
+                d -> new Item(d.getName(), "", Integer.toString(d.getPrice())));
     }
 
     public static ValueEventListener placesListListener(String placeName, Activity context) {
-        return new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                List<Place> places = Client.getPlacesForName(dataSnapshot, placeName);
-                ListAdapter adapter = new ItemsAdapter(places, context);
-                setList(places, context, adapter, PlacePage.class, PLACE_EXTRA_NAME);
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        };
+        return itemsListListener(context, PLACE_EXTRA_NAME, PlacePage.class,
+                snapshot -> Client.getPlacesForName(snapshot, placeName),
+                p -> new Item(p.getName(), p.getAddress(), Double.toString(round(p.getRate())) + "/5"));
     }
 
     public static ValueEventListener dishesListListener(String dishName, Activity context) {
-        return new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                List<Dish> dishes = Client.getDishesForName(dataSnapshot, dishName);
-                ListAdapter adapter = new ItemsAdapter(context, dishes);
-                setList(dishes, context, adapter, FoodPage.class, DISH_EXTRA_NAME);
-            }
+        return itemsListListener(context, DISH_EXTRA_NAME, FoodPage.class,
+                snapshot -> Client.getDishesForName(snapshot, dishName),
+                d -> new Item(d.getName(), d.getAddress() + " " + d.getPlaceName(), Integer.toString(d.getPrice())));
+    }
 
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        };
+    private static <T extends MapObject> ValueEventListener itemsListListener(Activity context, String extra, Class<?> nextActivity,
+                                                                              Function<DataSnapshot, List<T>> infoGetter,
+                                                                              Function<T, Item> converter) {
+        return Client.getListener(dataSnapshot -> {
+            List<T> mapObjects = infoGetter.apply(dataSnapshot);
+            List<Item> items = Stream.of(mapObjects)
+                    .map(converter::apply)
+                    .collect(Collectors.toList());
+            ListAdapter adapter = new ItemsAdapter(items, context);
+            setList(mapObjects, context, adapter, nextActivity, extra);
+        });
     }
 
     private static void setList(List<? extends MapObject> items, Activity context,

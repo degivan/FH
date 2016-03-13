@@ -22,4 +22,6 @@
 
     <string name="map_user_location">You are here.</string>
     <string name="empty"></string>
+    <string name="t_place_rate_index">" people rated this place"</string>
+    <string name="t_food_rate_index">" people rated this dish"</string>
 </resources>

@@ -10,6 +10,21 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".MainPage">
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:id="@+id/searchLine"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp"
+        android:singleLine="true"
+        android:maxLength="255"
+        android:onClick="onSearchLineClick"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:text="@string/search_line" />
+
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -17,8 +32,7 @@
         android:id="@+id/b_find_place_for_name"
         android:layout_alignParentTop="true"
         android:layout_marginTop="80dp"
-        android:onClick="onFindPlaceForNameClick"
-        android:layout_alignTop="@+id/search_line" />
+        android:onClick="onFindPlaceForNameClick" />
 
     <Button
         android:layout_width="fill_parent"
@@ -47,22 +61,6 @@
         android:layout_marginTop="60dp"
         android:onClick="onFindFoodForNameNearbyClick" />
 
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/search_line"
-        android:id="@+id/search_line"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/b_find_place_for_name_nearby"
-        android:layout_alignEnd="@+id/b_find_place_for_name_nearby"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:editable="true"
-        android:maxLength="255"
-        android:singleLine="true"
-        android:onClick="onSearchLineClick" />
-
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -81,4 +79,5 @@
         android:layout_marginTop="60dp"
         android:id="@+id/b_show_all_places"
         android:onClick="onShowAllPlacesClick" />
+
 </RelativeLayout>

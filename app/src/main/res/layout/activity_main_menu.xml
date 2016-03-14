@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:screenOrientation="portrait"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context=".MainPage">
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:id="@+id/searchLine"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp"
+        android:singleLine="true"
+        android:maxLength="255"
+        android:onClick="onSearchLineClick"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:text="@string/search_line" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/b_find_place_for_name"
+        android:id="@+id/b_find_place_for_name"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="70dp"
+        android:onClick="onFindPlaceForNameClick" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/b_find_food_for_name"
+        android:id="@+id/b_find_food_for_name"
+        android:layout_alignTop="@+id/b_find_place_for_name"
+        android:layout_marginTop="60dp"
+        android:onClick="onFindFoodForNameClick" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/b_find_place_for_name_nearby"
+        android:id="@+id/b_find_place_for_name_nearby"
+        android:layout_alignTop="@+id/b_find_food_for_name"
+        android:layout_marginTop="60dp"
+        android:onClick="onFindPlaceForNameNearbyClick" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/b_find_food_for_name_nearby"
+        android:id="@+id/b_find_food_for_name_nearby"
+        android:layout_alignTop="@+id/b_find_place_for_name_nearby"
+        android:layout_marginTop="60dp"
+        android:onClick="onFindFoodForNameNearbyClick" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/b_add_new_place"
+        android:id="@+id/b_add_new_place"
+        android:onClick="onAddNewPlaceClick"
+        android:layout_alignTop="@+id/b_find_food_for_name_nearby"
+        android:layout_marginTop="60dp" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/b_show_all_places"
+        android:layout_below="@+id/b_add_new_place"
+        android:layout_alignTop="@+id/b_add_new_place"
+        android:layout_marginTop="60dp"
+        android:id="@+id/b_show_all_places"
+        android:onClick="onShowAllPlacesClick" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/b_view_history"
+        android:id="@+id/viewHistoryButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@id/b_add_new_place"
+        android:layout_marginTop="60dp"
+        android:layout_alignParentRight="true"
+        android:onClick="onViewHistoryClick" />
+
+</RelativeLayout>

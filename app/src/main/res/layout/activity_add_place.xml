@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="spbau.mit.divan.foodhunter.activities.AddPlace">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Add new place."
+        android:id="@+id/addPlaceText"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="60dp" />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:id="@+id/newPlaceName"
+        android:layout_alignTop="@+id/addPlaceText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="63dp"
+        android:maxLength="255"
+        android:singleLine="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/newPlaceAddress"
+        android:layout_below="@+id/newPlaceAddressText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:singleLine="true"
+        android:maxLength="255" />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:id="@+id/newPlaceOpenHrs"
+        android:layout_below="@+id/newPlaceOpenHrsText"
+        android:layout_alignParentLeft="true"
+        android:singleLine="true"
+        android:maxLength="255" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/newPlaceLatitude"
+        android:layout_below="@+id/newPlaceLatText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/newPlaceOpenHrs"
+        android:layout_alignEnd="@+id/newPlaceOpenHrs"
+        android:singleLine="true"
+        android:maxLength="255" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/newPlaceLongitude"
+        android:layout_below="@+id/newPlaceLngText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/newPlaceLatitude"
+        android:layout_alignEnd="@+id/newPlaceLatitude"
+        android:singleLine="true"
+        android:maxLength="255" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="name:"
+        android:id="@+id/newPlaceNameText"
+        android:layout_alignBottom="@+id/newPlaceName"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="address:"
+        android:id="@+id/newPlaceAddressText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/newPlaceName"
+        android:layout_marginTop="60dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="open hours:"
+        android:id="@+id/newPlaceOpenHrsText"
+        android:layout_centerVertical="true"
+        android:layout_alignTop="@+id/newPlaceAddress"
+        android:layout_marginTop="60dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="latitude:"
+        android:id="@+id/newPlaceLatText"
+        android:layout_alignTop="@+id/newPlaceOpenHrs"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="60dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/newPlaceLngText"
+        android:layout_below="@+id/newPlaceLatitude"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/newPlaceLatitude"
+        android:layout_marginTop="60dp"
+        android:text="longitude:" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add place"
+        android:id="@+id/sendPlaceButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/newPlaceLongitude"
+        android:layout_alignEnd="@+id/newPlaceLongitude"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:onClick="onAddPlaceClick" />
+
+</RelativeLayout>

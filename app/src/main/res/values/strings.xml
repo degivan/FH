@@ -24,4 +24,15 @@
     <string name="empty"></string>
     <string name="t_place_rate_index">" people rated this place"</string>
     <string name="t_food_rate_index">" people rated this dish"</string>
+
+    <string name="login">Login</string>
+    <string name="b_sign_in">registrate</string>
+    <string name="t_enter_username">Enter your login.</string>
+    <string name="b_view_history">view query history</string>
+    <string name="t_history">History:</string>
+    <string name="no_connection">"No internet connection."</string>
+    <string name="already_rated">Already rated.</string>
+    <string name="already_reviewed">Already reviewed.</string>
+    <string name="incorrect_login">"Incorrect login"</string>
+    <string name="m_no_access">No access to current location.</string>
 </resources>

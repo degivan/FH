@@ -1,5 +1,9 @@
 package spbau.mit.divan.foodhunter.net;
 
+import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.annimon.stream.Collectors;
@@ -95,16 +99,18 @@ public class Client {
                 .map(dishSnapshot -> dishSnapshot.getValue(Dish.class));
     }
 
-    public static void changeDishRate(Dish dish, float rate) {
+    public static void changeDishRate(Dish dish, float rate, Activity context) {
         dish.changeRate(rate);
+        UserInfo.addDishWithChangedRate(dish, context);
         Map<String, Object> rateChanges = new HashMap<>();
         rateChanges.put("rate", dish.getRate());
         rateChanges.put("rateIndex", dish.getRateIndex());
         APP_DATABASE.child("dishes").child(Integer.toString(dish.getDishId())).updateChildren(rateChanges);
     }
 
-    public static void changePlaceRate(Place place, float rate) {
+    public static void changePlaceRate(Place place, float rate, Activity context) {
         place.setRate(rate);
+        UserInfo.addPlaceWithChangedRate(place, context);
         Map<String, Object> rateChanges = new HashMap<>();
         rateChanges.put("rate", place.getRate());
         rateChanges.put("rateIndex", place.getRateIndex());
@@ -112,8 +118,17 @@ public class Client {
 
     }
 
-    public static void sendReview(Place place, String review) {
-        place.sendReview(review);
+    public static boolean isOnline(Activity context) {
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    public static void sendReview(Place place, String review, Activity context) {
+        String logAndReview = UserInfo.getLogin(context) + "#" + review;
+        UserInfo.addPlaceWithNewReview(place, context);
+        place.sendReview(logAndReview);
         APP_DATABASE.child("places").child(Integer.toString(place.getId())).child("reviews").setValue(place.getReviews());
     }
 

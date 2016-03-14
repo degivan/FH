@@ -85,6 +85,14 @@ public class Place implements Serializable, MapObject {
         return reviews;
     }
 
+    public static String getReview(String s) {
+        return s.split("#")[1];
+    }
+
+    public static String getLogin(String s) {
+        return s.split("#")[0];
+    }
+
     public void sendReview(String review) {
         if (reviews == null) {
             reviews = new ArrayList<>();

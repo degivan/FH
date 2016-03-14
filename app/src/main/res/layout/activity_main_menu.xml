@@ -31,7 +31,7 @@
         android:text="@string/b_find_place_for_name"
         android:id="@+id/b_find_place_for_name"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="70dp"
         android:onClick="onFindPlaceForNameClick" />
 
     <Button
@@ -79,5 +79,16 @@
         android:layout_marginTop="60dp"
         android:id="@+id/b_show_all_places"
         android:onClick="onShowAllPlacesClick" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/b_view_history"
+        android:id="@+id/viewHistoryButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@id/b_add_new_place"
+        android:layout_marginTop="60dp"
+        android:layout_alignParentRight="true"
+        android:onClick="onViewHistoryClick" />
 
 </RelativeLayout>

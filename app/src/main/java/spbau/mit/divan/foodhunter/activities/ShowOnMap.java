@@ -73,23 +73,27 @@ public class ShowOnMap extends FragmentActivity implements OnMapReadyCallback, G
         }
         Location location = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
-        LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
-        LatLng placeLatLng = new LatLng(place.getLatitude(), place.getLongitude());
-        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.fromLatLngZoom(ll, (float) 15.5)));
-        mMap.addMarker(new MarkerOptions()
-                .anchor(0.0f, 1.0f)
-                .position(ll)
-                .title(getResources().getString(R.string.map_user_location))
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-        mMap.addMarker(new MarkerOptions()
-                .anchor(0.0f, 1.0f)
-                .position(placeLatLng)
-                .title(place.getName()));
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        builder.include(ll);
-        builder.include(placeLatLng);
-        LatLngBounds bounds = builder.build();
-        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
+        if (location != null) {
+            LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
+            LatLng placeLatLng = new LatLng(place.getLatitude(), place.getLongitude());
+            mMap.moveCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.fromLatLngZoom(ll, (float) 15.5)));
+            mMap.addMarker(new MarkerOptions()
+                    .anchor(0.0f, 1.0f)
+                    .position(ll)
+                    .title(getResources().getString(R.string.map_user_location))
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+            mMap.addMarker(new MarkerOptions()
+                    .anchor(0.0f, 1.0f)
+                    .position(placeLatLng)
+                    .title(place.getName()));
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            builder.include(ll);
+            builder.include(placeLatLng);
+            LatLngBounds bounds = builder.build();
+            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
+        } else {
+            showToast(this, getResources().getString(R.string.m_no_access));
+        }
     }
 
     @Override

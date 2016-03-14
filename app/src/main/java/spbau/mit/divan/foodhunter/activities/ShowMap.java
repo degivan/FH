@@ -13,8 +13,6 @@ import android.widget.EditText;
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import com.firebase.client.DataSnapshot;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -35,12 +33,15 @@ import spbau.mit.divan.foodhunter.R;
 import spbau.mit.divan.foodhunter.dishes.Dish;
 import spbau.mit.divan.foodhunter.dishes.Place;
 import spbau.mit.divan.foodhunter.net.Client;
+import spbau.mit.divan.foodhunter.net.QueryHistory;
 
 import static spbau.mit.divan.foodhunter.activities.ExtraNames.DISH_EXTRA_NAME;
 import static spbau.mit.divan.foodhunter.activities.ExtraNames.PLACE_EXTRA_NAME;
 import static spbau.mit.divan.foodhunter.activities.ExtraNames.SEARCH_CHOICE_EXTRA_NAME;
 import static spbau.mit.divan.foodhunter.activities.ExtraNames.SEARCH_TEXT_EXTRA_NAME;
 import static spbau.mit.divan.foodhunter.activities.FoodHunterUtil.clearEditText;
+import static spbau.mit.divan.foodhunter.activities.FoodHunterUtil.openNetActivity;
+import static spbau.mit.divan.foodhunter.activities.FoodHunterUtil.openNetActivityAndFinish;
 import static spbau.mit.divan.foodhunter.activities.FoodHunterUtil.showToast;
 
 public class ShowMap extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -62,6 +63,7 @@ public class ShowMap extends FragmentActivity implements OnMapReadyCallback, Goo
         mMap = mapFragment.getMap();
         mapFragment.getMapAsync(this);
         name = getIntent().getStringExtra(SEARCH_TEXT_EXTRA_NAME);
+        ll = new LatLng(59.938942, 30.3149874);
         searchChoice = (SearchChoice) getIntent().getSerializableExtra(SEARCH_CHOICE_EXTRA_NAME);
         searchLine = ((EditText) findViewById(R.id.search_line));
         searchLine.setText(name);
@@ -95,7 +97,13 @@ public class ShowMap extends FragmentActivity implements OnMapReadyCallback, Goo
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
+        Client.request(snapshot -> {
+            if (searchChoice == SearchChoice.SEARCH_PLACE) {
+                showPlacesOnMap(snapshot);
+            } else {
+                showDishesOnMap(snapshot);
+            }
+        });
     }
 
     @Override
@@ -108,20 +116,17 @@ public class ShowMap extends FragmentActivity implements OnMapReadyCallback, Goo
         }
         Location location = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
-        ll = new LatLng(location.getLatitude(), location.getLongitude());
-        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.fromLatLngZoom(ll, (float) 15.5)));
-        mMap.addMarker(new MarkerOptions()
-                .anchor(0.0f, 1.0f)
-                .position(ll)
-                .title(getResources().getString(R.string.map_user_location))
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-        Client.request(snapshot -> {
-            if (searchChoice == SearchChoice.SEARCH_PLACE) {
-                showPlacesOnMap(snapshot);
-            } else {
-                showDishesOnMap(snapshot);
-            }
-        });
+        if (location != null) {
+            ll = new LatLng(location.getLatitude(), location.getLongitude());
+            mMap.moveCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.fromLatLngZoom(ll, (float) 15.5)));
+            mMap.addMarker(new MarkerOptions()
+                    .anchor(0.0f, 1.0f)
+                    .position(ll)
+                    .title(getResources().getString(R.string.map_user_location))
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        } else {
+            showToast(this, getResources().getString(R.string.m_no_access));
+        }
     }
 
     @Override
@@ -136,9 +141,14 @@ public class ShowMap extends FragmentActivity implements OnMapReadyCallback, Goo
 
     public void onFindClick(View view) {
         Intent intent = new Intent(ShowMap.this, ShowMap.class);
-        intent.putExtra(SEARCH_TEXT_EXTRA_NAME, ((EditText) findViewById(R.id.search_line)).getText().toString());
+        intent.putExtra(SEARCH_TEXT_EXTRA_NAME, searchLine.getText().toString());
         intent.putExtra(SEARCH_CHOICE_EXTRA_NAME, searchChoice);
-        startActivity(intent);
+        if (searchChoice == SearchChoice.SEARCH_FOOD) {
+            QueryHistory.addDishQuery(this, searchLine.getText().toString());
+        } else {
+            QueryHistory.addPlaceQuery(this, searchLine.getText().toString());
+        }
+        openNetActivityAndFinish(this, intent);
     }
 
     private void showPlacesOnMap(DataSnapshot dataSnapshot) {

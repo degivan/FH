@@ -10,11 +10,14 @@ import android.widget.TextView;
 import spbau.mit.divan.foodhunter.R;
 import spbau.mit.divan.foodhunter.dishes.Dish;
 import spbau.mit.divan.foodhunter.net.Client;
+import spbau.mit.divan.foodhunter.net.UserInfo;
 
 import static spbau.mit.divan.foodhunter.R.id.ratingBar;
 import static spbau.mit.divan.foodhunter.activities.ExtraNames.DISH_EXTRA_NAME;
 import static spbau.mit.divan.foodhunter.activities.ExtraNames.PLACE_EXTRA_NAME;
 import static spbau.mit.divan.foodhunter.activities.FoodHunterUtil.displayMapObjectRate;
+import static spbau.mit.divan.foodhunter.activities.FoodHunterUtil.onNetConnectedAction;
+import static spbau.mit.divan.foodhunter.activities.FoodHunterUtil.showToast;
 
 public class FoodPage extends AppCompatActivity {
     private Dish dish;
@@ -33,18 +36,32 @@ public class FoodPage extends AppCompatActivity {
                 .append(" rub").toString());
         ((TextView) findViewById(R.id.foodDescriptionText)).setText(dish.getDescription());
         displayRate();
+        if (UserInfo.isDishRateChangedBefore(dish, this)) {
+            ((RatingBar) findViewById(R.id.ratingBar)).setIsIndicator(true);
+        }
     }
 
     public void onFoodRateClick(View view) {
-        Client.changeDishRate(dish, ((RatingBar) findViewById(ratingBar)).getRating());
-        displayRate();
+        onNetConnectedAction(this, () -> {
+            if (!UserInfo.isDishRateChangedBefore(dish, this)) {
+                Client.changeDishRate(dish, ((RatingBar) findViewById(ratingBar)).getRating(), this);
+                displayRate();
+                ((RatingBar) findViewById(R.id.ratingBar)).setIsIndicator(true);
+            } else {
+                showToast(this, getResources().getString(R.string.already_rated));
+            }
+            return null;
+        });
     }
 
     public void onPlacePageButtonClick(View view) {
-        Client.request(snapshot -> {
-            Intent intent = new Intent(FoodPage.this, PlacePage.class);
-            intent.putExtra(PLACE_EXTRA_NAME, Client.getPlace(snapshot, dish.getPlaceId()));
-            startActivity(intent);
+        onNetConnectedAction(this, () -> {
+            Client.request(snapshot -> {
+                Intent intent = new Intent(FoodPage.this, PlacePage.class);
+                intent.putExtra(PLACE_EXTRA_NAME, Client.getPlace(snapshot, dish.getPlaceId()));
+                startActivity(intent);
+            });
+            return null;
         });
     }
 

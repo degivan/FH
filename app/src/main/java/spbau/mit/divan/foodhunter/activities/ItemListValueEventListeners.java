@@ -24,6 +24,7 @@ import spbau.mit.divan.foodhunter.net.Client;
 import static java.lang.Math.round;
 import static spbau.mit.divan.foodhunter.activities.ExtraNames.DISH_EXTRA_NAME;
 import static spbau.mit.divan.foodhunter.activities.ExtraNames.PLACE_EXTRA_NAME;
+import static spbau.mit.divan.foodhunter.activities.FoodHunterUtil.openNetActivity;
 
 public class ItemListValueEventListeners {
     public static ValueEventListener menuListener(Place place, Activity context) {
@@ -67,7 +68,7 @@ public class ItemListValueEventListeners {
             listView.setOnItemClickListener(((parent, view, position, id) -> {
                 Intent intent = new Intent(context, nextActivity);
                 intent.putExtra(extra, (Serializable) items.get(position));
-                context.startActivity(intent);
+                openNetActivity(context, intent);
             }));
         }
     }

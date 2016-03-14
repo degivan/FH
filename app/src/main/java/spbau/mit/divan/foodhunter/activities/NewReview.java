@@ -11,6 +11,7 @@ import spbau.mit.divan.foodhunter.dishes.Place;
 import spbau.mit.divan.foodhunter.net.Client;
 
 import static spbau.mit.divan.foodhunter.activities.ExtraNames.PLACE_EXTRA_NAME;
+import static spbau.mit.divan.foodhunter.activities.FoodHunterUtil.onNetConnectedAction;
 
 public class NewReview extends AppCompatActivity {
     private Place place;
@@ -23,8 +24,11 @@ public class NewReview extends AppCompatActivity {
     }
 
     public void onSendReviewClick(View view) {
-        Client.sendReview(place, ((EditText) findViewById(R.id.reviewEditText)).getText().toString());
-        this.onBackPressed();
+        onNetConnectedAction(this, () -> {
+            Client.sendReview(place, ((EditText) findViewById(R.id.reviewEditText)).getText().toString(), this);
+            this.onBackPressed();
+            return null;
+        });
     }
 
     @Override

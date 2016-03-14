@@ -8,9 +8,11 @@ import android.widget.EditText;
 
 import spbau.mit.divan.foodhunter.R;
 import spbau.mit.divan.foodhunter.net.Client;
+import spbau.mit.divan.foodhunter.net.QueryHistory;
 
 import static spbau.mit.divan.foodhunter.activities.ExtraNames.SEARCH_TEXT_EXTRA_NAME;
 import static spbau.mit.divan.foodhunter.activities.FoodHunterUtil.clearEditText;
+import static spbau.mit.divan.foodhunter.activities.FoodHunterUtil.openNetActivity;
 
 public class PlacesListPage extends AppCompatActivity {
     private EditText searchLine;
@@ -26,9 +28,10 @@ public class PlacesListPage extends AppCompatActivity {
     }
 
     public void onFindPlacesClick(View view) {
-        Intent intent = new Intent(PlacesListPage.this, PlacesListPage.class);
-        intent.putExtra(SEARCH_TEXT_EXTRA_NAME, ((EditText) findViewById(R.id.placesSearchLine)).getText().toString());
-        startActivity(intent);
+            Intent intent = new Intent(PlacesListPage.this, PlacesListPage.class);
+            intent.putExtra(SEARCH_TEXT_EXTRA_NAME, searchLine.getText().toString());
+            QueryHistory.addPlaceQuery(this, searchLine.getText().toString());
+            openNetActivity(this, intent);
     }
 
     @Override

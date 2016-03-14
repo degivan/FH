@@ -11,6 +11,8 @@ import spbau.mit.divan.foodhunter.dishes.Place;
 import spbau.mit.divan.foodhunter.net.Client;
 
 import static spbau.mit.divan.foodhunter.activities.ExtraNames.PLACE_EXTRA_NAME;
+import static spbau.mit.divan.foodhunter.activities.FoodHunterUtil.openNetActivity;
+import static spbau.mit.divan.foodhunter.activities.FoodHunterUtil.openNetActivityAndFinish;
 import static spbau.mit.divan.foodhunter.activities.FoodHunterUtil.showToast;
 
 public class AddDish extends AppCompatActivity {
@@ -25,22 +27,26 @@ public class AddDish extends AppCompatActivity {
     }
 
     public void onAddNewDishClick(View view) {
-        String name = ((TextView) findViewById(R.id.newDishName)).getText().toString();
-        String description = ((TextView) findViewById(R.id.newDishDescription)).getText().toString();
-        String price = ((TextView) findViewById(R.id.newDishPrice)).getText().toString();
-        if (price.matches(CORRECT_PRICE)) {
-            Client.pushDish(Integer.parseInt(price), name, description, place);
-            this.onBackPressed();
-        } else {
-            showToast(getApplicationContext(), getResources().getString(R.string.m_incorrect_price));
-        }
+            String name = ((TextView) findViewById(R.id.newDishName)).getText().toString();
+            String description = ((TextView) findViewById(R.id.newDishDescription)).getText().toString();
+            String price = ((TextView) findViewById(R.id.newDishPrice)).getText().toString();
+            if (price.matches(CORRECT_PRICE)) {
+                Client.pushDish(Integer.parseInt(price), name, description, place);
+                openNetActivityAndFinish(this, placePageIntent());
+            } else {
+                showToast(getApplicationContext(), getResources().getString(R.string.m_incorrect_price));
+            }
+    }
+
+    private Intent placePageIntent() {
+        Intent intent = new Intent(AddDish.this, PlacePage.class);
+        intent.putExtra(PLACE_EXTRA_NAME, place);
+        return intent;
     }
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(AddDish.this, PlacePage.class);
-        intent.putExtra(PLACE_EXTRA_NAME, place);
-        startActivity(intent);
+        startActivity(placePageIntent());
         finish();
     }
 }
